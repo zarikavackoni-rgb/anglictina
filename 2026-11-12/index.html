@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#e8f3ff">
+  <meta name="color-scheme" content="light">
+  <title>Angličtina – slovíčka 12. 11. 2026</title>
+  <script type="application/json" id="lesson-meta">{"date":"2026-11-12","title":"Angličtina – slovíčka 12. 11. 2026","words":[{"en":"inside","cs":"uvnitř"},{"en":"outside","cs":"venku / venkovní"},{"en":"good at","cs":"dobrý v (něčem)"},{"en":"bad at","cs":"špatný v (něčem)"},{"en":"before","cs":"před / předtím"},{"en":"after","cs":"po / potom"},{"en":"dinner","cs":"večeře"}]}</script>
+  <style>
+    :root {
+      --sky: #e8f3ff;
+      --paper: #ffffff;
+      --ink: #1a2744;
+      --muted: #3d4d6a;
+      --line: #c9d6ea;
+      --blue: #1d64c2;
+      --blue-hover: #1554a5;
+      --blue-soft: #d6e7ff;
+      --green: #0b7a3b;
+      --green-bg: #def7e8;
+      --red: #b42318;
+      --red-bg: #fde8e6;
+      --purple: #5b3cc4;
+      --purple-bg: #efe8ff;
+      --block: #d3dce8;
+      --shadow: 0 10px 30px rgba(26, 39, 68, 0.08);
+      --radius: 18px;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      padding: 1.1rem 1rem 7rem;
+      font-family: "Trebuchet MS", "Segoe UI", system-ui, sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(1200px 500px at 8% -10%, #cfe6ff 0%, transparent 50%),
+        radial-gradient(800px 420px at 100% 0%, #ffe9c8 0%, transparent 46%),
+        var(--sky);
+      line-height: 1.5;
+    }
+    .wrap { width: min(44rem, 100%); margin: 0 auto; }
+    .back {
+      display: inline-block;
+      margin: 0 0 0.9rem;
+      color: var(--blue);
+      font-weight: 700;
+      text-decoration: none;
+    }
+    .back:hover, .back:focus-visible { text-decoration: underline; }
+    .kicker {
+      margin: 0 0 0.25rem;
+      color: var(--muted);
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+      font-size: 0.8rem;
+    }
+    h1 {
+      margin: 0 0 0.6rem;
+      font-size: clamp(1.55rem, 5vw, 2.05rem);
+      line-height: 1.2;
+    }
+    .intro { margin: 0 0 1.1rem; color: var(--muted); font-size: 1.05rem; }
+    section {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 1.15rem 1.1rem 1.25rem;
+      margin: 0 0 1rem;
+    }
+    h2 { margin: 0 0 0.5rem; font-size: 1.25rem; }
+    p { margin: 0 0 0.8rem; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 0.2rem 0 0.2rem;
+    }
+    th, td {
+      text-align: left;
+      padding: 0.55rem 0.65rem;
+      border-bottom: 1px solid var(--line);
+      vertical-align: top;
+    }
+    th {
+      font-size: 0.85rem;
+      color: var(--muted);
+      font-weight: 700;
+    }
+    td:first-child { font-weight: 700; color: var(--blue); }
+    .board-wrap {
+      overflow-x: auto;
+      padding: 0.15rem 0 0.7rem;
+    }
+    .board {
+      display: grid;
+      gap: 3px;
+      width: min(100%, calc(var(--cols, 8) * 2.55rem));
+      margin: 0.2rem 0 0.4rem;
+    }
+    .cell {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 1;
+    }
+    .cell-block {
+      background: var(--block);
+      border-radius: 6px;
+      border: 1px solid #c0cad8;
+    }
+    .cell-num {
+      position: absolute;
+      top: 2px;
+      left: 3px;
+      z-index: 1;
+      font-size: 0.62rem;
+      line-height: 1;
+      color: var(--muted);
+      pointer-events: none;
+      font-weight: 700;
+    }
+    .cell input {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      border: 1px solid #8ea0ba;
+      border-radius: 6px;
+      background: #fff;
+      color: var(--ink);
+      text-align: center;
+      text-transform: uppercase;
+      font: 700 clamp(1rem, 4.5vw, 1.35rem)/1 "Trebuchet MS", "Segoe UI", system-ui, sans-serif;
+      caret-color: var(--blue);
+    }
+    .cell input:focus {
+      outline: 3px solid #8cb6f0;
+      outline-offset: 0;
+      border-color: var(--blue);
+      z-index: 2;
+    }
+    .cell input.cell-ok { background: var(--green-bg); color: var(--green); border-color: #8dcea6; }
+    .cell input.cell-bad { background: var(--red-bg); color: var(--red); border-color: #e8b0ab; }
+    .cell input.cell-reveal { background: var(--purple-bg); color: var(--purple); border-color: #c9b8f0; }
+    .clues {
+      margin: 0.4rem 0 1rem;
+      padding-left: 1.3rem;
+    }
+    .clues li { margin: 0.25rem 0; }
+    .actions { display: flex; flex-wrap: wrap; gap: 0.55rem; margin: 0 0 0.7rem; }
+    button {
+      appearance: none;
+      border: 0;
+      border-radius: 999px;
+      padding: 0.62rem 1.05rem;
+      font: 700 1rem/1.2 "Trebuchet MS", "Segoe UI", system-ui, sans-serif;
+      cursor: pointer;
+      min-height: 44px;
+    }
+    button.primary { background: var(--blue); color: #fff; }
+    button.primary:hover, button.primary:focus-visible { background: var(--blue-hover); }
+    button.secondary {
+      background: var(--blue-soft);
+      color: var(--blue);
+    }
+    button.secondary:hover, button.secondary:focus-visible { background: #c5dbff; }
+    button:focus-visible { outline: 3px solid #8cb6f0; outline-offset: 2px; }
+    .note { color: var(--muted); margin: 0.15rem 0 0; }
+    .task {
+      padding: 0.85rem 0;
+      border-top: 1px solid var(--line);
+    }
+    .task:first-of-type { border-top: 0; padding-top: 0.15rem; }
+    .task label {
+      display: block;
+      font-weight: 700;
+      margin: 0 0 0.4rem;
+    }
+    .hint { color: var(--muted); margin: 0.35rem 0 0.15rem; font-size: 0.98rem; }
+    .task input[type="text"] {
+      width: 100%;
+      max-width: 24rem;
+      border: 1px solid #8ea0ba;
+      border-radius: 12px;
+      padding: 0.7rem 0.8rem;
+      font: 400 1rem/1.3 "Trebuchet MS", "Segoe UI", system-ui, sans-serif;
+      background: #fff;
+      color: var(--ink);
+    }
+    .task input[type="text"]:focus {
+      outline: 3px solid #8cb6f0;
+      border-color: var(--blue);
+    }
+    .task.ok input[type="text"] { background: var(--green-bg); border-color: #8dcea6; }
+    .task.bad input[type="text"] { background: var(--red-bg); border-color: #e8b0ab; }
+    .feedback { min-height: 1.4em; margin: 0.45rem 0 0; font-weight: 700; }
+    .feedback.ok { color: var(--green); }
+    .feedback.bad { color: var(--red); }
+    .answer-hint { margin: 0.15rem 0 0; color: var(--muted); font-weight: 400; }
+    .callout {
+      display: none;
+      margin: 0.9rem 0 0;
+      padding: 0.9rem 1rem;
+      border-radius: 14px;
+      background: var(--green-bg);
+      color: var(--green);
+    }
+    .callout.show { display: block; }
+    .callout strong { display: block; font-size: 1.1rem; margin-bottom: 0.15rem; }
+    .score-bar {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      padding: 0.85rem 1rem calc(0.85rem + env(safe-area-inset-bottom));
+      background: rgba(255, 255, 255, 0.95);
+      border-top: 1px solid var(--line);
+      text-align: center;
+      font-weight: 700;
+      font-size: 1.05rem;
+      box-shadow: 0 -6px 20px rgba(26, 39, 68, 0.06);
+    }
+    noscript {
+      display: block;
+      margin: 1rem 0;
+      padding: 0.8rem 1rem;
+      background: var(--red-bg);
+      color: var(--red);
+      border-radius: 12px;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <a class="back" href="../">← Všechny hry</a>
+    <header>
+      <p class="kicker">Lekce <span id="date-cs"></span></p>
+      <h1 id="title"></h1>
+      <p class="intro" id="intro"></p>
+    </header>
+    <noscript>Tato hra potřebuje zapnutý JavaScript. Slovíčka uvidíš v tabulce, úlohy se ale bez něj vyplnit nedají.</noscript>
+    <main>
+      <section id="vocab-section">
+        <h2>Slovíčka</h2>
+        <p>Tady jsou slovíčka z lekce. Učitel je poslal jen anglicky, proto je tu i český význam.</p>
+        <table>
+          <thead><tr><th>Anglicky</th><th>Česky</th></tr></thead>
+          <tbody id="vocab-body"></tbody>
+        </table>
+      </section>
+      <section id="crossword-section">
+        <h2>Křížovka</h2>
+        <p id="crossword-intro">Do každého bílého okénka napiš jedno písmeno. Nápovědy jsou česky, do křížovky patří anglická slova.</p>
+        <div class="board-wrap"><div class="board" id="board" aria-label="Křížovka"></div></div>
+        <ol class="clues" id="clues"></ol>
+        <div class="actions">
+          <button type="button" class="primary" id="btn-check">Zkontrolovat</button>
+          <button type="button" class="secondary" id="btn-reveal">Ukázat řešení</button>
+        </div>
+        <p class="note" id="crossword-result" hidden></p>
+        <p class="note" id="crossword-reveal-note" hidden>Tady je řešení. Okénka, která ještě nebyla správně vyplněná, jsou označená jinou barvou.</p>
+      </section>
+      <section id="translation-section">
+        <h2>Přelož do angličtiny</h2>
+        <p>Napiš anglické slovo nebo spojení. Velká a malá písmena nevadí.</p>
+        <div id="translations"></div>
+      </section>
+      <section id="fill-section">
+        <h2>Doplň větu</h2>
+        <p>Doplň chybějící anglické slovo nebo spojení. U každé věty máš českou nápovědu.</p>
+        <div id="fillins"></div>
+        <div class="actions">
+          <button type="button" class="secondary" id="btn-reset">Začít znovu</button>
+        </div>
+        <div class="callout" id="success"><strong>Výborně!</strong> Máš všechno správně. To je paráda.</div>
+      </section>
+    </main>
+  </div>
+  <div class="score-bar" role="status" aria-live="polite" id="score-bar"></div>
+  <script>
+  const GAME_DATA = {"title": "Angličtina – slovíčka 12. 11. 2026", "date": "2026-11-12", "dateCs": "12. 11. 2026", "intro": "Procvič si sedm nových slovíček z lekce 12. 11. 2026. Nejdřív si je prohlédni, potom vyplň křížovku, přelož slova do angličtiny a doplň je do vět.", "words": [{"en": "inside", "cs": "uvnitř"}, {"en": "outside", "cs": "venku / venkovní"}, {"en": "good at", "cs": "dobrý v (něčem)"}, {"en": "bad at", "cs": "špatný v (něčem)"}, {"en": "before", "cs": "před / předtím"}, {"en": "after", "cs": "po / potom"}, {"en": "dinner", "cs": "večeře"}], "crosswordNote": "Spojení good at a bad at procvičíš v dalších úlohách.", "crossword": {"rows": 7, "cols": 8, "placements": [{"answer": "OUTSIDE", "row": 0, "col": 2, "dir": "down", "clue": "Svisle: Jak řekneš „venku“ nebo „venkovní“?"}, {"answer": "AFTER", "row": 2, "col": 0, "dir": "across", "clue": "Vodorovně: Jak řekneš „po“ nebo „potom“?"}, {"answer": "INSIDE", "row": 3, "col": 0, "dir": "across", "clue": "Vodorovně: Jak řekneš „uvnitř“?"}, {"answer": "DINNER", "row": 5, "col": 2, "dir": "across", "clue": "Vodorovně: Jak řekneš „večeře“?"}, {"answer": "BEFORE", "row": 6, "col": 1, "dir": "across", "clue": "Vodorovně: Jak řekneš „před“ nebo „předtím“?"}], "numbers": {"0,2": 1, "2,0": 2, "3,0": 3, "5,2": 4, "6,1": 5}, "solution": [[null, null, "O", null, null, null, null, null], [null, null, "U", null, null, null, null, null], ["A", "F", "T", "E", "R", null, null, null], ["I", "N", "S", "I", "D", "E", null, null], [null, null, "I", null, null, null, null, null], [null, null, "D", "I", "N", "N", "E", "R"], [null, "B", "E", "F", "O", "R", "E", null]]}, "translations": [{"prompt": "uvnitř", "answer": "inside"}, {"prompt": "venku / venkovní", "answer": "outside"}, {"prompt": "dobrý v (něčem)", "answer": "good at"}, {"prompt": "špatný v (něčem)", "answer": "bad at"}, {"prompt": "před / předtím", "answer": "before"}, {"prompt": "po / potom", "answer": "after"}, {"prompt": "večeře", "answer": "dinner"}], "fillIns": [{"sentence": "The cat is ___ the house.", "answer": "inside", "hint": "Kočka je uvnitř domu."}, {"sentence": "The children play ___.", "answer": "outside", "hint": "Děti si hrají venku."}, {"sentence": "My sister is ___ drawing.", "answer": "good at", "hint": "Moje sestra je dobrá v kreslení."}, {"sentence": "I am ___ singing.", "answer": "bad at", "hint": "Jsem špatný ve zpívání."}, {"sentence": "I wash my hands ___ dinner.", "answer": "before", "hint": "Před večeří si umyju ruce."}, {"sentence": "We watch a film ___ dinner.", "answer": "after", "hint": "Po večeři se díváme na film."}, {"sentence": "We eat ___ at seven.", "answer": "dinner", "hint": "Večeři jíme v sedm."}]};
+  </script>
+  <script>
+  (function () {
+    const data = GAME_DATA;
+    const cw = data.crossword;
+    const hasCrossword = !!(cw && cw.placements && cw.placements.length);
+    const translations = data.translations || [];
+    const fillIns = data.fillIns || [];
+    const total = (hasCrossword ? cw.placements.length : 0) + translations.length + fillIns.length;
+
+    document.title = data.title;
+    document.getElementById("title").textContent = data.title;
+    document.getElementById("date-cs").textContent = data.dateCs;
+    document.getElementById("intro").textContent = data.intro;
+
+    const vocabBody = document.getElementById("vocab-body");
+    data.words.forEach(function (w) {
+      const tr = document.createElement("tr");
+      const en = document.createElement("td");
+      const cs = document.createElement("td");
+      en.textContent = w.en;
+      cs.textContent = w.cs;
+      tr.appendChild(en);
+      tr.appendChild(cs);
+      vocabBody.appendChild(tr);
+    });
+
+    let grid = [];
+    let crosswordChecked = false;
+    let crosswordRevealed = false;
+    let dir = "across";
+    const inputRefs = {};
+    const translationValues = translations.map(function () { return ""; });
+    const translationState = translations.map(function () { return "idle"; });
+    const fillValues = fillIns.map(function () { return ""; });
+    const fillState = fillIns.map(function () { return "idle"; });
+
+    function key(r, c) { return r + "," + c; }
+
+    function emptyGrid() {
+      const g = [];
+      if (!hasCrossword) return g;
+      for (let r = 0; r < cw.rows; r++) {
+        const row = [];
+        for (let c = 0; c < cw.cols; c++) row.push("");
+        g.push(row);
+      }
+      return g;
+    }
+
+    function normalize(value) {
+      return String(value || "")
+        .trim()
+        .toLowerCase()
+        .replace(/[-_]/g, " ")
+        .replace(/\s+/g, " ");
+    }
+
+    function wordCells(word) {
+      const cells = [];
+      for (let i = 0; i < word.answer.length; i++) {
+        const r = word.dir === "down" ? word.row + i : word.row;
+        const c = word.dir === "across" ? word.col + i : word.col;
+        cells.push([r, c]);
+      }
+      return cells;
+    }
+
+    function isWordCorrect(word) {
+      return wordCells(word).every(function (cell) {
+        const r = cell[0], c = cell[1];
+        return ((grid[r] && grid[r][c]) || "").toUpperCase() === ((cw.solution[r] && cw.solution[r][c]) || "");
+      });
+    }
+
+    function crosswordScore() {
+      if (!hasCrossword) return 0;
+      return cw.placements.reduce(function (sum, word) {
+        return sum + (isWordCorrect(word) ? 1 : 0);
+      }, 0);
+    }
+
+    function countCorrect(states) {
+      return states.filter(function (s) { return s === "correct"; }).length;
+    }
+
+    function score() {
+      return crosswordScore() + countCorrect(translationState) + countCorrect(fillState);
+    }
+
+    function nextLetterCell(r, c, direction, step) {
+      let rr = r, cc = c;
+      for (let i = 0; i < 24; i++) {
+        if (direction === "across") cc += step;
+        else rr += step;
+        if (rr < 0 || cc < 0 || rr >= cw.rows || cc >= cw.cols) return null;
+        if (cw.solution[rr] && cw.solution[rr][cc] != null) return [rr, cc];
+      }
+      return null;
+    }
+
+    function directionsAt(r, c) {
+      const dirs = [];
+      cw.placements.forEach(function (word) {
+        const hit = wordCells(word).some(function (cell) { return cell[0] === r && cell[1] === c; });
+        if (hit && dirs.indexOf(word.dir) === -1) dirs.push(word.dir);
+      });
+      return dirs;
+    }
+
+    function focusCell(r, c) {
+      const el = inputRefs[key(r, c)];
+      if (el) el.focus();
+    }
+
+    function updateCells() {
+      if (!hasCrossword) return;
+      for (let r = 0; r < cw.rows; r++) {
+        for (let c = 0; c < cw.cols; c++) {
+          const answer = cw.solution[r][c];
+          if (answer == null) continue;
+          const input = inputRefs[key(r, c)];
+          if (!input) continue;
+          const typed = (grid[r][c] || "").toUpperCase();
+          const isCorrect = typed === answer;
+          let shown = typed;
+          input.classList.remove("cell-ok", "cell-bad", "cell-reveal");
+          if (crosswordRevealed && !isCorrect) {
+            shown = answer;
+            input.classList.add("cell-reveal");
+          } else if (crosswordChecked && isCorrect) {
+            input.classList.add("cell-ok");
+          } else if (crosswordChecked && !isCorrect) {
+            input.classList.add("cell-bad");
+          }
+          input.value = shown;
+        }
+      }
+      const result = document.getElementById("crossword-result");
+      if (crosswordChecked) {
+        result.hidden = false;
+        result.textContent = "V křížovce máš " + crosswordScore() + " z " + cw.placements.length + " slov správně. Zelená okénka jsou správně vyplněná.";
+      } else {
+        result.hidden = true;
+      }
+      document.getElementById("crossword-reveal-note").hidden = !crosswordRevealed;
+      document.getElementById("btn-reveal").textContent = crosswordRevealed ? "Skrýt řešení" : "Ukázat řešení";
+    }
+
+    function updateScore() {
+      document.getElementById("score-bar").textContent = "Máš " + score() + " z " + total + " správně.";
+      document.getElementById("success").classList.toggle("show", total > 0 && score() === total);
+    }
+
+    function setLetter(r, c, letter) {
+      grid[r][c] = letter;
+      if (letter) {
+        const next = nextLetterCell(r, c, dir, 1);
+        if (next) focusCell(next[0], next[1]);
+      }
+      updateCells();
+      updateScore();
+    }
+
+    function buildCrossword() {
+      const section = document.getElementById("crossword-section");
+      if (!hasCrossword) {
+        section.hidden = true;
+        return;
+      }
+      const intro = document.getElementById("crossword-intro");
+      let text = "Do každého bílého okénka napiš jedno písmeno. Nápovědy jsou česky, do křížovky patří anglická slova.";
+      if (data.crosswordNote) text += " " + data.crosswordNote;
+      intro.textContent = text;
+
+      const board = document.getElementById("board");
+      board.style.setProperty("--cols", String(cw.cols));
+      board.style.gridTemplateColumns = "repeat(" + cw.cols + ", 1fr)";
+      grid = emptyGrid();
+
+      for (let r = 0; r < cw.rows; r++) {
+        for (let c = 0; c < cw.cols; c++) {
+          const answer = cw.solution[r][c];
+          const wrap = document.createElement("div");
+          if (answer == null) {
+            wrap.className = "cell cell-block";
+            wrap.setAttribute("aria-hidden", "true");
+            board.appendChild(wrap);
+            continue;
+          }
+          wrap.className = "cell";
+          const num = cw.numbers[key(r, c)];
+          if (num) {
+            const n = document.createElement("span");
+            n.className = "cell-num";
+            n.textContent = String(num);
+            wrap.appendChild(n);
+          }
+          const input = document.createElement("input");
+          input.type = "text";
+          input.inputMode = "text";
+          input.maxLength = 2;
+          input.autocomplete = "off";
+          input.autocorrect = "off";
+          input.autocapitalize = "characters";
+          input.spellcheck = false;
+          input.setAttribute("aria-label", "Písmeno v řádku " + (r + 1) + ", sloupec " + (c + 1));
+          input.addEventListener("input", (function (rr, cc) {
+            return function (e) {
+              const raw = e.target.value.toUpperCase().replace(/[^A-Z]/g, "");
+              const letter = raw.slice(-1);
+              setLetter(rr, cc, letter);
+            };
+          })(r, c));
+          input.addEventListener("keydown", (function (rr, cc) {
+            return function (e) {
+              if (e.isComposing) return;
+              if (e.key === "Backspace") {
+                const current = grid[rr][cc] || "";
+                if (current === "") {
+                  e.preventDefault();
+                  const prev = nextLetterCell(rr, cc, dir, -1);
+                  if (prev) {
+                    grid[prev[0]][prev[1]] = "";
+                    focusCell(prev[0], prev[1]);
+                    updateCells();
+                    updateScore();
+                  }
+                }
+                return;
+              }
+              const arrows = {
+                ArrowLeft: [0, -1],
+                ArrowRight: [0, 1],
+                ArrowUp: [-1, 0],
+                ArrowDown: [1, 0]
+              };
+              const move = arrows[e.key];
+              if (move) {
+                e.preventDefault();
+                dir = move[0] !== 0 ? "down" : "across";
+                const step = (move[0] + move[1] > 0) ? 1 : -1;
+                const next = nextLetterCell(rr, cc, dir, step);
+                if (next) focusCell(next[0], next[1]);
+              }
+            };
+          })(r, c));
+          input.addEventListener("focus", (function (rr, cc) {
+            return function () {
+              const dirs = directionsAt(rr, cc);
+              if (dirs.length === 1) dir = dirs[0];
+            };
+          })(r, c));
+          wrap.appendChild(input);
+          inputRefs[key(r, c)] = input;
+          board.appendChild(wrap);
+        }
+      }
+
+      const clues = document.getElementById("clues");
+      cw.placements
+        .slice()
+        .sort(function (a, b) {
+          const na = cw.numbers[key(a.row, a.col)] || 0;
+          const nb = cw.numbers[key(b.row, b.col)] || 0;
+          return na - nb;
+        })
+        .forEach(function (word) {
+          const li = document.createElement("li");
+          li.textContent = word.clue;
+          clues.appendChild(li);
+        });
+
+      document.getElementById("btn-check").addEventListener("click", function () {
+        crosswordChecked = true;
+        updateCells();
+        updateScore();
+      });
+      document.getElementById("btn-reveal").addEventListener("click", function () {
+        crosswordRevealed = !crosswordRevealed;
+        updateCells();
+      });
+    }
+
+    function paintTask(node, state, answer) {
+      node.classList.remove("ok", "bad");
+      const feedback = node.querySelector(".feedback");
+      const extra = node.querySelector(".answer-hint");
+      extra.hidden = true;
+      extra.textContent = "";
+      if (state === "correct") {
+        node.classList.add("ok");
+        feedback.className = "feedback ok";
+        feedback.textContent = "Správně!";
+      } else if (state === "wrong") {
+        node.classList.add("bad");
+        feedback.className = "feedback bad";
+        feedback.textContent = "Zatím ne.";
+        extra.hidden = false;
+        extra.textContent = "Správně je: " + answer + ".";
+      } else {
+        feedback.className = "feedback";
+        feedback.textContent = "";
+      }
+    }
+
+    function buildTextTasks(containerId, items, values, states, placeholder, withHint) {
+      const root = document.getElementById(containerId);
+      items.forEach(function (item, i) {
+        const task = document.createElement("div");
+        task.className = "task";
+        const label = document.createElement("label");
+        const inputId = containerId + "-" + i;
+        label.setAttribute("for", inputId);
+        label.textContent = withHint ? item.sentence : item.prompt;
+        const input = document.createElement("input");
+        input.id = inputId;
+        input.type = "text";
+        input.placeholder = placeholder;
+        input.autocomplete = "off";
+        input.autocorrect = "off";
+        input.autocapitalize = "off";
+        input.spellcheck = false;
+        const feedback = document.createElement("div");
+        feedback.className = "feedback";
+        const extra = document.createElement("p");
+        extra.className = "answer-hint";
+        extra.hidden = true;
+        task.appendChild(label);
+        if (withHint) {
+          const hint = document.createElement("p");
+          hint.className = "hint";
+          hint.textContent = "Nápověda: " + item.hint;
+          task.appendChild(hint);
+        }
+        task.appendChild(input);
+        task.appendChild(feedback);
+        task.appendChild(extra);
+        root.appendChild(task);
+
+        function check(forceWrong) {
+          if (normalize(values[i]) === normalize(item.answer)) {
+            states[i] = "correct";
+          } else if (forceWrong && String(values[i] || "").trim()) {
+            states[i] = "wrong";
+          } else if (states[i] !== "idle") {
+            states[i] = "idle";
+          }
+          paintTask(task, states[i], item.answer);
+          updateScore();
+        }
+
+        input.addEventListener("input", function () {
+          values[i] = input.value;
+          if (normalize(input.value) === normalize(item.answer)) {
+            states[i] = "correct";
+          } else if (states[i] !== "idle") {
+            states[i] = "idle";
+          }
+          paintTask(task, states[i], item.answer);
+          updateScore();
+        });
+        input.addEventListener("blur", function () { check(true); });
+        input.addEventListener("keydown", function (e) {
+          if (e.key === "Enter") {
+            e.preventDefault();
+            check(true);
+          }
+        });
+      });
+    }
+
+    function resetAll() {
+      grid = emptyGrid();
+      crosswordChecked = false;
+      crosswordRevealed = false;
+      for (let i = 0; i < translationValues.length; i++) translationValues[i] = "";
+      for (let i = 0; i < translationState.length; i++) translationState[i] = "idle";
+      for (let i = 0; i < fillValues.length; i++) fillValues[i] = "";
+      for (let i = 0; i < fillState.length; i++) fillState[i] = "idle";
+      document.querySelectorAll("#translations input, #fillins input").forEach(function (el) { el.value = ""; });
+      document.querySelectorAll("#translations .task, #fillins .task").forEach(function (node) {
+        node.classList.remove("ok", "bad");
+        const feedback = node.querySelector(".feedback");
+        const extra = node.querySelector(".answer-hint");
+        if (feedback) { feedback.className = "feedback"; feedback.textContent = ""; }
+        if (extra) { extra.hidden = true; extra.textContent = ""; }
+      });
+      updateCells();
+      updateScore();
+    }
+
+    buildCrossword();
+    if (!translations.length) document.getElementById("translation-section").hidden = true;
+    if (!fillIns.length) document.getElementById("fill-section").hidden = true;
+    buildTextTasks("translations", translations, translationValues, translationState, "napiš anglicky", false);
+    buildTextTasks("fillins", fillIns, fillValues, fillState, "chybějící slovo", true);
+    document.getElementById("btn-reset").addEventListener("click", resetAll);
+    updateCells();
+    updateScore();
+  })();
+  </script>
+</body>
+</html>
