@@ -336,7 +336,6 @@
         </div>
         <p class="note" id="crossword-result" hidden></p>
         <p class="note" id="crossword-reveal-note" hidden>Tady je řešení. Okénka, která ještě nebyla správně vyplněná, jsou označená jinou barvou.</p>
-        <div class="unlock-note" id="crossword-unlocked" hidden>🎉 Křížovka je vyluštěná! Na konci stránky se ti odemkla Střelnice slovíček.<br><button type="button" class="primary" id="btn-go-shoot">Jdu střílet 🎯</button></div>
       </section>
       <section id="translation-section">
         <h2>Přelož do angličtiny</h2>
@@ -351,17 +350,18 @@
           <button type="button" class="secondary" id="btn-reset">Začít znovu</button>
         </div>
         <div class="callout" id="success"><strong>Výborně!</strong> Máš všechno správně. To je paráda.</div>
+        <div class="unlock-note" id="shoot-unlocked-note" hidden>🎉 Všechno je hotové! Na konci stránky se ti odemkla Střelnice slovíček.<br><button type="button" class="primary" id="btn-go-shoot">Jdu střílet 🎯</button></div>
       </section>
       <section id="shoot-section" class="locked" aria-live="polite">
         <h2>Finále: Střelnice slovíček 🎯</h2>
         <div id="shoot-locked" class="lock-box">
           <span class="lock-icon" aria-hidden="true">🔒</span>
-          <span id="shoot-locked-text">Tahle hra se odemkne, až správně vyluštíš celou křížovku.</span>
+          <span><span id="shoot-locked-text">Střelnice se odemkne, až budeš mít správně všechny úkoly nahoře.</span><br><span id="shoot-missing"></span></span>
         </div>
         <div id="shoot-open" hidden>
-          <p>Nahoře uvidíš české slovo. Sestřel (klikni nebo ťukni) správné anglické slovo, které létá po hřišti. Slova jdou postupně jedno po druhém. Po každém zásahu slovo uslyšíš anglicky a zbylá slova trochu zrychlí. Měříme ti čas!</p>
+          <p>Nahoře uvidíš české slovo. Sestřel (klikni nebo ťukni) správné anglické slovo, které létá po hřišti. Slova jdou postupně jedno po druhém. Po každém zásahu slovo uslyšíš anglicky a zbylá slova zrychlí o 10 %. Měříme ti čas! Když hraješ znovu, postupně přibývají nová slovíčka mimo lekci.</p>
           <div class="shoot-hud">
-            <span id="shoot-progress">Slovo 0 z 0</span>
+            <span><span id="shoot-round">Kolo 1</span> · <span id="shoot-progress">Slovo 0 z 0</span></span>
             <span>Čas: <span class="shoot-timer" id="shoot-timer">00:00</span></span>
           </div>
           <div class="arena" id="arena">
@@ -373,10 +373,11 @@
               <button type="button" class="primary" id="btn-shoot-start">Start</button>
             </div>
             <div class="arena-overlay" id="shoot-done" hidden>
-              <p class="big">🏆 Hotovo! Skvělá práce!</p>
+              <p class="big" id="shoot-done-title">🏆 Hotovo! Skvělá práce!</p>
               <p>Všechna slova jsi trefil(a) správně. Trvalo ti to:</p>
               <p class="time" id="shoot-final-time">00:00</p>
               <p id="shoot-best"></p>
+              <p id="shoot-next-note"></p>
               <button type="button" class="primary" id="btn-shoot-again">Hrát znovu</button>
             </div>
           </div>
@@ -784,7 +785,7 @@
     /* ---------- Finále: Střelnice slovíček ---------- */
     let shootUnlocked = false;
     const shoot = window.__shoot = {
-      running: false, order: [], idx: 0, bubbles: [], startTs: 0, raf: 0, tick: 0, lastTs: 0, speedMul: 1
+      running: false, order: [], idx: 0, bubbles: [], startTs: 0, raf: 0, tick: 0, lastTs: 0, speedMul: 1, round: 0, roundWords: [], usedBasic: {}
     };
     const shootWords = (function () {
       const seen = {};
@@ -796,13 +797,58 @@
       });
     })();
 
+    const BASIC_WORDS = [{"en": "mother", "cs": "maminka"}, {"en": "father", "cs": "tatínek"}, {"en": "sister", "cs": "sestra"}, {"en": "brother", "cs": "bratr"}, {"en": "grandmother", "cs": "babička"}, {"en": "grandfather", "cs": "dědeček"}, {"en": "baby", "cs": "miminko"}, {"en": "family", "cs": "rodina"}, {"en": "son", "cs": "syn"}, {"en": "daughter", "cs": "dcera"}, {"en": "aunt", "cs": "teta"}, {"en": "uncle", "cs": "strýc"}, {"en": "friend", "cs": "kamarád"}, {"en": "boy", "cs": "chlapec"}, {"en": "girl", "cs": "dívka"}, {"en": "man", "cs": "muž"}, {"en": "woman", "cs": "žena"}, {"en": "red", "cs": "červená"}, {"en": "blue", "cs": "modrá"}, {"en": "green", "cs": "zelená"}, {"en": "yellow", "cs": "žlutá"}, {"en": "black", "cs": "černá"}, {"en": "white", "cs": "bílá"}, {"en": "orange", "cs": "oranžová"}, {"en": "pink", "cs": "růžová"}, {"en": "brown", "cs": "hnědá"}, {"en": "grey", "cs": "šedá"}, {"en": "purple", "cs": "fialová"}, {"en": "one", "cs": "jedna"}, {"en": "two", "cs": "dva"}, {"en": "three", "cs": "tři"}, {"en": "four", "cs": "čtyři"}, {"en": "five", "cs": "pět"}, {"en": "six", "cs": "šest"}, {"en": "seven", "cs": "sedm"}, {"en": "eight", "cs": "osm"}, {"en": "nine", "cs": "devět"}, {"en": "ten", "cs": "deset"}, {"en": "eleven", "cs": "jedenáct"}, {"en": "twelve", "cs": "dvanáct"}, {"en": "twenty", "cs": "dvacet"}, {"en": "hundred", "cs": "sto"}, {"en": "dog", "cs": "pes"}, {"en": "cat", "cs": "kočka"}, {"en": "horse", "cs": "kůň"}, {"en": "cow", "cs": "kráva"}, {"en": "pig", "cs": "prase"}, {"en": "sheep", "cs": "ovce"}, {"en": "duck", "cs": "kachna"}, {"en": "hen", "cs": "slepice"}, {"en": "mouse", "cs": "myš"}, {"en": "rabbit", "cs": "králík"}, {"en": "bird", "cs": "pták"}, {"en": "fish", "cs": "ryba"}, {"en": "frog", "cs": "žába"}, {"en": "bear", "cs": "medvěd"}, {"en": "lion", "cs": "lev"}, {"en": "tiger", "cs": "tygr"}, {"en": "elephant", "cs": "slon"}, {"en": "monkey", "cs": "opice"}, {"en": "snake", "cs": "had"}, {"en": "fox", "cs": "liška"}, {"en": "wolf", "cs": "vlk"}, {"en": "owl", "cs": "sova"}, {"en": "bee", "cs": "včela"}, {"en": "spider", "cs": "pavouk"}, {"en": "giraffe", "cs": "žirafa"}, {"en": "turtle", "cs": "želva"}, {"en": "butterfly", "cs": "motýl"}, {"en": "goat", "cs": "koza"}, {"en": "apple", "cs": "jablko"}, {"en": "banana", "cs": "banán"}, {"en": "pear", "cs": "hruška"}, {"en": "bread", "cs": "chléb"}, {"en": "butter", "cs": "máslo"}, {"en": "cheese", "cs": "sýr"}, {"en": "milk", "cs": "mléko"}, {"en": "egg", "cs": "vejce"}, {"en": "water", "cs": "voda"}, {"en": "juice", "cs": "džus"}, {"en": "tea", "cs": "čaj"}, {"en": "soup", "cs": "polévka"}, {"en": "rice", "cs": "rýže"}, {"en": "meat", "cs": "maso"}, {"en": "cake", "cs": "dort"}, {"en": "sugar", "cs": "cukr"}, {"en": "salt", "cs": "sůl"}, {"en": "potato", "cs": "brambora"}, {"en": "tomato", "cs": "rajče"}, {"en": "carrot", "cs": "mrkev"}, {"en": "strawberry", "cs": "jahoda"}, {"en": "lemon", "cs": "citron"}, {"en": "ice cream", "cs": "zmrzlina"}, {"en": "chocolate", "cs": "čokoláda"}, {"en": "breakfast", "cs": "snídaně"}, {"en": "lunch", "cs": "oběd"}, {"en": "honey", "cs": "med"}, {"en": "cherry", "cs": "třešeň"}, {"en": "school", "cs": "škola"}, {"en": "teacher", "cs": "učitel"}, {"en": "pupil", "cs": "žák"}, {"en": "book", "cs": "kniha"}, {"en": "pen", "cs": "pero"}, {"en": "pencil", "cs": "tužka"}, {"en": "eraser", "cs": "guma"}, {"en": "ruler", "cs": "pravítko"}, {"en": "bag", "cs": "taška"}, {"en": "chair", "cs": "židle"}, {"en": "table", "cs": "stůl"}, {"en": "classroom", "cs": "třída"}, {"en": "homework", "cs": "domácí úkol"}, {"en": "board", "cs": "tabule"}, {"en": "exercise book", "cs": "sešit"}, {"en": "crayon", "cs": "pastelka"}, {"en": "scissors", "cs": "nůžky"}, {"en": "glue", "cs": "lepidlo"}, {"en": "map", "cs": "mapa"}, {"en": "computer", "cs": "počítač"}, {"en": "letter", "cs": "dopis"}, {"en": "head", "cs": "hlava"}, {"en": "eye", "cs": "oko"}, {"en": "ear", "cs": "ucho"}, {"en": "nose", "cs": "nos"}, {"en": "mouth", "cs": "ústa"}, {"en": "tooth", "cs": "zub"}, {"en": "hair", "cs": "vlasy"}, {"en": "hand", "cs": "ruka"}, {"en": "leg", "cs": "noha"}, {"en": "finger", "cs": "prst"}, {"en": "knee", "cs": "koleno"}, {"en": "back", "cs": "záda"}, {"en": "neck", "cs": "krk"}, {"en": "face", "cs": "obličej"}, {"en": "shoulder", "cs": "rameno"}, {"en": "stomach", "cs": "břicho"}, {"en": "house", "cs": "dům"}, {"en": "flat", "cs": "byt"}, {"en": "room", "cs": "pokoj"}, {"en": "kitchen", "cs": "kuchyně"}, {"en": "bathroom", "cs": "koupelna"}, {"en": "bedroom", "cs": "ložnice"}, {"en": "garden", "cs": "zahrada"}, {"en": "door", "cs": "dveře"}, {"en": "window", "cs": "okno"}, {"en": "bed", "cs": "postel"}, {"en": "sofa", "cs": "gauč"}, {"en": "lamp", "cs": "lampa"}, {"en": "floor", "cs": "podlaha"}, {"en": "wall", "cs": "zeď"}, {"en": "roof", "cs": "střecha"}, {"en": "stairs", "cs": "schody"}, {"en": "key", "cs": "klíč"}, {"en": "clock", "cs": "hodiny"}, {"en": "cup", "cs": "hrnek"}, {"en": "plate", "cs": "talíř"}, {"en": "spoon", "cs": "lžíce"}, {"en": "fork", "cs": "vidlička"}, {"en": "knife", "cs": "nůž"}, {"en": "toy", "cs": "hračka"}, {"en": "ball", "cs": "míč"}, {"en": "phone", "cs": "telefon"}, {"en": "picture", "cs": "obrázek"}, {"en": "T-shirt", "cs": "tričko"}, {"en": "shirt", "cs": "košile"}, {"en": "trousers", "cs": "kalhoty"}, {"en": "skirt", "cs": "sukně"}, {"en": "dress", "cs": "šaty"}, {"en": "coat", "cs": "kabát"}, {"en": "jacket", "cs": "bunda"}, {"en": "hat", "cs": "klobouk"}, {"en": "sock", "cs": "ponožka"}, {"en": "shoe", "cs": "bota"}, {"en": "scarf", "cs": "šála"}, {"en": "gloves", "cs": "rukavice"}, {"en": "sweater", "cs": "svetr"}, {"en": "pyjamas", "cs": "pyžamo"}, {"en": "sun", "cs": "slunce"}, {"en": "rain", "cs": "déšť"}, {"en": "snow", "cs": "sníh"}, {"en": "wind", "cs": "vítr"}, {"en": "cloud", "cs": "mrak"}, {"en": "sky", "cs": "obloha"}, {"en": "tree", "cs": "strom"}, {"en": "flower", "cs": "květina"}, {"en": "grass", "cs": "tráva"}, {"en": "river", "cs": "řeka"}, {"en": "sea", "cs": "moře"}, {"en": "mountain", "cs": "hora"}, {"en": "moon", "cs": "měsíc"}, {"en": "star", "cs": "hvězda"}, {"en": "rainbow", "cs": "duha"}, {"en": "forest", "cs": "les"}, {"en": "lake", "cs": "jezero"}, {"en": "day", "cs": "den"}, {"en": "night", "cs": "noc"}, {"en": "morning", "cs": "ráno"}, {"en": "evening", "cs": "večer"}, {"en": "week", "cs": "týden"}, {"en": "year", "cs": "rok"}, {"en": "today", "cs": "dnes"}, {"en": "tomorrow", "cs": "zítra"}, {"en": "yesterday", "cs": "včera"}, {"en": "birthday", "cs": "narozeniny"}, {"en": "car", "cs": "auto"}, {"en": "bus", "cs": "autobus"}, {"en": "train", "cs": "vlak"}, {"en": "bike", "cs": "kolo"}, {"en": "plane", "cs": "letadlo"}, {"en": "boat", "cs": "loď"}, {"en": "shop", "cs": "obchod"}, {"en": "street", "cs": "ulice"}, {"en": "town", "cs": "město"}, {"en": "village", "cs": "vesnice"}, {"en": "doctor", "cs": "doktor"}, {"en": "hospital", "cs": "nemocnice"}, {"en": "money", "cs": "peníze"}, {"en": "present", "cs": "dárek"}, {"en": "game", "cs": "hra"}, {"en": "music", "cs": "hudba"}, {"en": "run", "cs": "běhat"}, {"en": "jump", "cs": "skákat"}, {"en": "swim", "cs": "plavat"}, {"en": "read", "cs": "číst"}, {"en": "write", "cs": "psát"}, {"en": "sing", "cs": "zpívat"}, {"en": "dance", "cs": "tancovat"}, {"en": "eat", "cs": "jíst"}, {"en": "drink", "cs": "pít"}, {"en": "sleep", "cs": "spát"}, {"en": "play", "cs": "hrát"}, {"en": "go", "cs": "jít"}, {"en": "come", "cs": "přijít"}, {"en": "see", "cs": "vidět"}, {"en": "look", "cs": "dívat se"}, {"en": "listen", "cs": "poslouchat"}, {"en": "speak", "cs": "mluvit"}, {"en": "open", "cs": "otevřít"}, {"en": "close", "cs": "zavřít"}, {"en": "sit", "cs": "sedět"}, {"en": "stand", "cs": "stát"}, {"en": "draw", "cs": "kreslit"}, {"en": "cook", "cs": "vařit"}, {"en": "help", "cs": "pomáhat"}, {"en": "love", "cs": "milovat"}, {"en": "want", "cs": "chtít"}, {"en": "give", "cs": "dát"}, {"en": "take", "cs": "vzít"}, {"en": "buy", "cs": "koupit"}, {"en": "fly", "cs": "létat"}, {"en": "climb", "cs": "lézt"}, {"en": "wash", "cs": "mýt"}, {"en": "learn", "cs": "učit se"}, {"en": "think", "cs": "myslet"}, {"en": "know", "cs": "vědět"}, {"en": "cry", "cs": "plakat"}, {"en": "laugh", "cs": "smát se"}, {"en": "wait", "cs": "čekat"}, {"en": "big", "cs": "velký"}, {"en": "small", "cs": "malý"}, {"en": "long", "cs": "dlouhý"}, {"en": "short", "cs": "krátký"}, {"en": "tall", "cs": "vysoký"}, {"en": "happy", "cs": "šťastný"}, {"en": "sad", "cs": "smutný"}, {"en": "new", "cs": "nový"}, {"en": "old", "cs": "starý"}, {"en": "young", "cs": "mladý"}, {"en": "fast", "cs": "rychlý"}, {"en": "slow", "cs": "pomalý"}, {"en": "beautiful", "cs": "krásný"}, {"en": "ugly", "cs": "ošklivý"}, {"en": "clean", "cs": "čistý"}, {"en": "dirty", "cs": "špinavý"}, {"en": "easy", "cs": "snadný"}, {"en": "difficult", "cs": "těžký"}, {"en": "funny", "cs": "vtipný"}, {"en": "hungry", "cs": "hladový"}, {"en": "thirsty", "cs": "žíznivý"}, {"en": "tired", "cs": "unavený"}, {"en": "strong", "cs": "silný"}, {"en": "kind", "cs": "laskavý"}, {"en": "loud", "cs": "hlasitý"}, {"en": "quiet", "cs": "tichý"}, {"en": "full", "cs": "plný"}, {"en": "empty", "cs": "prázdný"}, {"en": "soft", "cs": "měkký"}, {"en": "hard", "cs": "tvrdý"}, {"en": "wet", "cs": "mokrý"}, {"en": "dry", "cs": "suchý"}, {"en": "hot", "cs": "horký"}, {"en": "cold", "cs": "studený"}, {"en": "warm", "cs": "teplý"}];
+    const basicPool = (function () {
+      const lessonEn = {}, lessonCs = {};
+      shootWords.forEach(function (w) { lessonEn[normalize(w.en)] = 1; lessonCs[normalize(w.cs)] = 1; });
+      return BASIC_WORDS.filter(function (w) {
+        return !lessonEn[normalize(w.en)] && !lessonCs[normalize(w.cs)];
+      });
+    })();
+    const SWAP_PER_ROUND = 2;
+
     function crosswordSolved() {
       return hasCrossword && crosswordScore() === cw.placements.length;
     }
 
+    function missingParts() {
+      const miss = [];
+      if (hasCrossword && !crosswordSolved()) miss.push("křížovku");
+      if (translations.length && countCorrect(translationState) < translations.length) miss.push("překlady do angličtiny");
+      if (fillIns.length && countCorrect(fillState) < fillIns.length) miss.push("doplňování vět");
+      return miss;
+    }
+
     function checkShootUnlock() {
       if (shootUnlocked) return;
-      if (!hasCrossword || crosswordSolved()) unlockShoot(hasCrossword);
+      const miss = missingParts();
+      if (!miss.length) {
+        unlockShoot(hasCrossword || translations.length > 0 || fillIns.length > 0);
+      } else {
+        document.getElementById("shoot-missing").textContent = "Ještě dokonči: " + miss.join(", ") + ".";
+      }
+    }
+
+    function buildRoundWords(round) {
+      const n = shootWords.length;
+      if (round <= 1 || !basicPool.length) return shootWords.slice();
+      const maxNew = Math.max(0, n - 1);
+      const newCount = Math.min(maxNew, (round - 1) * SWAP_PER_ROUND, basicPool.length);
+      const kept = shuffle(shootWords).slice(0, n - newCount);
+      const usedCs = {};
+      kept.forEach(function (w) { usedCs[normalize(w.cs)] = 1; });
+      let fresh = basicPool.filter(function (w) { return !shoot.usedBasic[normalize(w.en)]; });
+      if (fresh.length < newCount) { shoot.usedBasic = {}; fresh = basicPool.slice(); }
+      const picked = [];
+      shuffle(fresh).forEach(function (w) {
+        if (picked.length >= newCount) return;
+        const k = normalize(w.cs);
+        if (usedCs[k]) return;
+        usedCs[k] = 1;
+        picked.push(w);
+        shoot.usedBasic[normalize(w.en)] = 1;
+      });
+      return kept.concat(picked);
     }
 
     function unlockShoot(announce) {
@@ -811,7 +857,7 @@
       section.classList.remove("locked");
       document.getElementById("shoot-locked").hidden = true;
       document.getElementById("shoot-open").hidden = false;
-      if (announce) document.getElementById("crossword-unlocked").hidden = false;
+      if (announce) document.getElementById("shoot-unlocked-note").hidden = false;
       shootProgress();
     }
 
@@ -831,7 +877,8 @@
     }
 
     function shootProgress() {
-      const n = shootWords.length;
+      const n = shoot.roundWords.length || shootWords.length;
+      document.getElementById("shoot-round").textContent = "Kolo " + Math.max(1, shoot.round);
       const shown = shoot.running ? Math.min(shoot.idx + 1, n) : (shoot.idx >= n && n ? n : 0);
       document.getElementById("shoot-progress").textContent = "Slovo " + shown + " z " + n;
       const tw = document.getElementById("target-word");
@@ -852,7 +899,7 @@
       setTimeout(function () { bar.classList.remove(cls); }, 450);
     }
 
-    const SPEED_STEP = 1.05;
+    const SPEED_STEP = 1.10;
     let enVoice = null;
     function pickVoice() {
       try {
@@ -888,17 +935,19 @@
 
     function startShoot() {
       shoot.speedMul = 1;
+      shoot.round += 1;
+      shoot.roundWords = buildRoundWords(shoot.round);
       speakWord(" ", 0); /* iOS: odemkne řeč při ťuknutí na Start */
       const arena = document.getElementById("arena");
       const layer = document.getElementById("bubbles");
       layer.innerHTML = "";
       shoot.bubbles = [];
-      shoot.order = shuffle(shootWords);
+      shoot.order = shuffle(shoot.roundWords);
       shoot.idx = 0;
       const W = arena.clientWidth, H = arena.clientHeight;
       const top = document.getElementById("target-bar").offsetHeight + 6;
       const speedBase = Math.max(40, Math.min(85, W / 7));
-      shuffle(shootWords).forEach(function (w) {
+      shuffle(shoot.roundWords).forEach(function (w) {
         const b = document.createElement("button");
         b.type = "button";
         b.className = "bubble";
@@ -1016,16 +1065,21 @@
         const prev = Number(localStorage.getItem(k) || 0);
         if (!prev || elapsed < prev) {
           localStorage.setItem(k, String(Math.round(elapsed)));
-          bestText = prev ? "Nový rekord! Předchozí nejlepší čas byl " + fmtTime(prev) + "." : "";
+          bestText = !prev ? "" : (fmtTime(prev) === t ? "Vyrovnal(a) jsi svůj nejlepší čas." : "Nový rekord! Předchozí nejlepší čas byl " + fmtTime(prev) + ".");
         } else {
           bestText = "Tvůj nejlepší čas: " + fmtTime(prev) + ".";
         }
       } catch (e) { bestText = ""; }
       document.getElementById("shoot-best").textContent = bestText;
+      document.getElementById("shoot-done-title").textContent = "🏆 Kolo " + shoot.round + " hotové! Skvělá práce!";
+      const lessonLeft = shootWords.length - Math.min(Math.max(0, shootWords.length - 1), shoot.round * SWAP_PER_ROUND, basicPool.length);
+      document.getElementById("shoot-next-note").textContent = basicPool.length
+        ? (lessonLeft <= 1 ? "V dalším kole už budou skoro všechna slovíčka nová." : "V dalším kole přibydou nová slovíčka mimo lekci.")
+        : "";
       document.getElementById("shoot-done").hidden = false;
       setShootFeedback("Hotovo za " + t + ". Výborně! 🏆", "ok");
       shootProgress();
-      window.__shootResult = { time: t, ms: Math.round(elapsed), speedMul: shoot.speedMul };
+      window.__shootResult = { time: t, ms: Math.round(elapsed), speedMul: shoot.speedMul, round: shoot.round, words: shoot.roundWords.map(function (w) { return w.en; }) };
     }
 
     document.getElementById("btn-shoot-start").addEventListener("click", startShoot);
@@ -1033,9 +1087,6 @@
     document.getElementById("btn-go-shoot").addEventListener("click", function () {
       document.getElementById("shoot-section").scrollIntoView({ behavior: "smooth", block: "start" });
     });
-    if (!hasCrossword) {
-      document.getElementById("shoot-locked-text").textContent = "Tahle lekce nemá křížovku, střelnice je otevřená hned.";
-    }
     if (!shootWords.length) document.getElementById("shoot-section").hidden = true;
 
     buildCrossword();
