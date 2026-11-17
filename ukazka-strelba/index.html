@@ -1054,6 +1054,7 @@
     function finishShoot() {
       const elapsed = performance.now() - shoot.startTs;
       shoot.running = false;
+      shoot.finishedAt = performance.now();
       cancelAnimationFrame(shoot.raf);
       clearInterval(shoot.tick);
       const t = fmtTime(elapsed);
@@ -1083,7 +1084,11 @@
     }
 
     document.getElementById("btn-shoot-start").addEventListener("click", startShoot);
-    document.getElementById("btn-shoot-again").addEventListener("click", startShoot);
+    document.getElementById("btn-shoot-again").addEventListener("click", function () {
+      /* Na mobilu by poslední ťuknutí mohlo hned „kliknout“ i na Hrát znovu. */
+      if (performance.now() - (shoot.finishedAt || 0) < 800) return;
+      startShoot();
+    });
     document.getElementById("btn-go-shoot").addEventListener("click", function () {
       document.getElementById("shoot-section").scrollIntoView({ behavior: "smooth", block: "start" });
     });
