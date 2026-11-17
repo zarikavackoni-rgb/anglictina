@@ -359,7 +359,7 @@
           <span id="shoot-locked-text">Tahle hra se odemkne, až správně vyluštíš celou křížovku.</span>
         </div>
         <div id="shoot-open" hidden>
-          <p>Nahoře uvidíš české slovo. Sestřel (klikni nebo ťukni) správné anglické slovo, které létá po hřišti. Slova jdou postupně jedno po druhém. Měříme ti čas!</p>
+          <p>Nahoře uvidíš české slovo. Sestřel (klikni nebo ťukni) správné anglické slovo, které létá po hřišti. Slova jdou postupně jedno po druhém. Po každém zásahu slovo uslyšíš anglicky a zbylá slova trochu zrychlí. Měříme ti čas!</p>
           <div class="shoot-hud">
             <span id="shoot-progress">Slovo 0 z 0</span>
             <span>Čas: <span class="shoot-timer" id="shoot-timer">00:00</span></span>
@@ -783,8 +783,8 @@
 
     /* ---------- Finále: Střelnice slovíček ---------- */
     let shootUnlocked = false;
-    const shoot = {
-      running: false, order: [], idx: 0, bubbles: [], startTs: 0, raf: 0, tick: 0, lastTs: 0
+    const shoot = window.__shoot = {
+      running: false, order: [], idx: 0, bubbles: [], startTs: 0, raf: 0, tick: 0, lastTs: 0, speedMul: 1
     };
     const shootWords = (function () {
       const seen = {};
@@ -852,7 +852,43 @@
       setTimeout(function () { bar.classList.remove(cls); }, 450);
     }
 
+    const SPEED_STEP = 1.05;
+    let enVoice = null;
+    function pickVoice() {
+      try {
+        if (!("speechSynthesis" in window)) return;
+        const voices = window.speechSynthesis.getVoices() || [];
+        enVoice = voices.find(function (v) { return /^en[-_]US/i.test(v.lang); }) ||
+          voices.find(function (v) { return /^en[-_]GB/i.test(v.lang); }) ||
+          voices.find(function (v) { return /^en/i.test(v.lang); }) || null;
+      } catch (e) { enVoice = null; }
+    }
+    try {
+      if ("speechSynthesis" in window) {
+        pickVoice();
+        if (typeof window.speechSynthesis.addEventListener === "function") {
+          window.speechSynthesis.addEventListener("voiceschanged", pickVoice);
+        }
+      }
+    } catch (e) {}
+    function speakWord(text, volume) {
+      try {
+        if (!("speechSynthesis" in window) || typeof SpeechSynthesisUtterance === "undefined") return;
+        const synth = window.speechSynthesis;
+        synth.cancel();
+        if (!enVoice) pickVoice();
+        const u = new SpeechSynthesisUtterance(text);
+        u.lang = enVoice ? enVoice.lang : "en-US";
+        if (enVoice) u.voice = enVoice;
+        u.rate = 1.1;
+        if (typeof volume === "number") u.volume = volume;
+        synth.speak(u);
+      } catch (e) {}
+    }
+
     function startShoot() {
+      shoot.speedMul = 1;
+      speakWord(" ", 0); /* iOS: odemkne řeč při ťuknutí na Start */
       const arena = document.getElementById("arena");
       const layer = document.getElementById("bubbles");
       layer.innerHTML = "";
@@ -909,7 +945,7 @@
       shoot.lastTs = ts;
       const alive = shoot.bubbles.filter(function (o) { return o.alive; });
       alive.forEach(function (o) {
-        o.x += o.vx * dt; o.y += o.vy * dt;
+        o.x += o.vx * shoot.speedMul * dt; o.y += o.vy * shoot.speedMul * dt;
         if (o.x < 0) { o.x = 0; o.vx = Math.abs(o.vx); }
         if (o.x + o.w > W) { o.x = Math.max(0, W - o.w); o.vx = -Math.abs(o.vx); }
         if (o.y < top) { o.y = top; o.vy = Math.abs(o.vy); }
@@ -944,6 +980,8 @@
       const target = shoot.order[shoot.idx];
       if (normalize(obj.word.en) === normalize(target.en)) {
         obj.alive = false;
+        speakWord(target.en);
+        shoot.speedMul *= SPEED_STEP;
         obj.el.classList.add("pop");
         setTimeout(function () { if (obj.el.parentNode) obj.el.parentNode.removeChild(obj.el); }, 360);
         flashBar("flash-ok");
@@ -987,7 +1025,7 @@
       document.getElementById("shoot-done").hidden = false;
       setShootFeedback("Hotovo za " + t + ". Výborně! 🏆", "ok");
       shootProgress();
-      window.__shootResult = { time: t, ms: Math.round(elapsed) };
+      window.__shootResult = { time: t, ms: Math.round(elapsed), speedMul: shoot.speedMul };
     }
 
     document.getElementById("btn-shoot-start").addEventListener("click", startShoot);
