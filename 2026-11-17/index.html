@@ -276,7 +276,7 @@
       border-radius: 999px; border: 3px solid #fff;
       background: #ffd166; color: #1a2744;
       font: 700 clamp(1rem, 4vw, 1.2rem)/1.2 "Trebuchet MS", "Segoe UI", system-ui, sans-serif;
-      white-space: nowrap; cursor: crosshair;
+      white-space: normal; max-width: min(90%, 14rem); text-align: center; cursor: crosshair;
       box-shadow: 0 6px 14px rgba(26, 39, 68, 0.18);
       will-change: transform; touch-action: manipulation;
     }
@@ -341,11 +341,6 @@
         <h2>Přelož do angličtiny</h2>
         <p>Napiš anglické slovo nebo spojení. Velká a malá písmena nevadí.</p>
         <div id="translations"></div>
-      </section>
-      <section id="fill-section">
-        <h2>Doplň větu</h2>
-        <p>Doplň chybějící anglické slovo nebo spojení. U každé věty máš českou nápovědu.</p>
-        <div id="fillins"></div>
         <div class="actions">
           <button type="button" class="secondary" id="btn-reset">Začít znovu</button>
         </div>
@@ -359,7 +354,7 @@
           <span><span id="shoot-locked-text">Střelnice se odemkne, až budeš mít správně všechny úkoly nahoře.</span><br><span id="shoot-missing"></span></span>
         </div>
         <div id="shoot-open" hidden>
-          <p>Nahoře uvidíš české slovo. Sestřel (klikni nebo ťukni) správné anglické slovo, které létá po hřišti. Slova jdou postupně jedno po druhém. Po každém zásahu slovo uslyšíš anglicky a zbylá slova zrychlí o 10 %. Měříme ti čas! Když hraješ znovu, postupně přibývají nová slovíčka mimo lekci.</p>
+          <p>Nahoře uvidíš české slovo. Sestřel (klikni nebo ťukni) správné anglické slovo, které létá po hřišti. Slova jdou postupně jedno po druhém. Po každém zásahu slovo uslyšíš anglicky a zbylá slova zrychlí o 10 %. Měříme ti čas! Když hraješ znovu, postupně přibývají další už probraná slovíčka z předchozích lekcí.</p>
           <div class="shoot-hud">
             <span><span id="shoot-round">Kolo 1</span> · <span id="shoot-progress">Slovo 0 z 0</span></span>
             <span>Čas: <span class="shoot-timer" id="shoot-timer">00:00</span></span>
@@ -388,7 +383,7 @@
   </div>
   <div class="score-bar" role="status" aria-live="polite" id="score-bar"></div>
   <script>
-  const GAME_DATA = {"title": "Angličtina – slovíčka 17. 11. 2026", "date": "2026-11-17", "dateCs": "17. 11. 2026", "intro": "Procvič si sedm nových slovíček z lekce 17. 11. 2026. Nejdřív si je prohlédni, potom vyplň křížovku, přelož slova do angličtiny a doplň je do vět. Pozor na rozdíl: wake up = probudit se, get up = vstát. Když budeš mít všechno správně, na konci se ti odemkne Střelnice slovíček.", "words": [{"en": "alarm clock", "cs": "budík"}, {"en": "how many times", "cs": "kolikrát"}, {"en": "old", "cs": "starý"}, {"en": "need", "cs": "potřebovat"}, {"en": "wake up", "cs": "probudit se"}, {"en": "get up", "cs": "vstát"}, {"en": "get", "cs": "dostat / získat"}], "crosswordNote": "Spojení alarm clock, how many times, wake up a get up procvičíš v dalších úlohách.", "crossword": {"rows": 4, "cols": 4, "placements": [{"answer": "OLD", "row": 0, "col": 3, "dir": "down", "clue": "Svisle: Jak řekneš „starý“?"}, {"answer": "GET", "row": 1, "col": 1, "dir": "down", "clue": "Svisle: Jak řekneš „dostat“ nebo „získat“?"}, {"answer": "NEED", "row": 2, "col": 0, "dir": "across", "clue": "Vodorovně: Jak řekneš „potřebovat“?"}], "numbers": {"0,3": 1, "1,1": 2, "2,0": 3}, "solution": [[null, null, null, "O"], [null, "G", null, "L"], ["N", "E", "E", "D"], [null, "T", null, null]]}, "translations": [{"prompt": "budík", "answer": "alarm clock"}, {"prompt": "kolikrát", "answer": "how many times"}, {"prompt": "starý", "answer": "old"}, {"prompt": "potřebovat", "answer": "need"}, {"prompt": "probudit se", "answer": "wake up"}, {"prompt": "vstát", "answer": "get up"}, {"prompt": "dostat / získat", "answer": "get"}], "fillIns": [{"sentence": "My ___ rings at seven o'clock.", "answer": "alarm clock", "hint": "Můj budík zvoní v sedm hodin."}, {"sentence": "___ do you brush your teeth every day?", "answer": "How many times", "hint": "Kolikrát si každý den čistíš zuby?"}, {"sentence": "My grandpa is very ___.", "answer": "old", "hint": "Můj dědeček je hodně starý."}, {"sentence": "I ___ a new pencil for school.", "answer": "need", "hint": "Potřebuju novou tužku do školy."}, {"sentence": "I ___ when my alarm clock rings.", "answer": "wake up", "hint": "Probudím se, když zazvoní můj budík."}, {"sentence": "Then I ___ and go to the bathroom.", "answer": "get up", "hint": "Potom vstanu a jdu do koupelny."}, {"sentence": "I ___ a present for my birthday.", "answer": "get", "hint": "K narozeninám dostanu dárek."}]};
+  const GAME_DATA = {"title": "Angličtina – slovíčka 17. 11. 2026", "date": "2026-11-17", "dateCs": "17. 11. 2026", "intro": "Procvič si sedm nových slovíček z lekce 17. 11. 2026. Nejdřív si je prohlédni, potom vyplň křížovku a přelož slova do angličtiny. Pozor na rozdíl: wake up = probudit se, get up = vstát. Když budeš mít všechno správně, na konci se ti odemkne Střelnice slovíček.", "words": [{"en": "alarm clock", "cs": "budík"}, {"en": "how many times", "cs": "kolikrát"}, {"en": "old", "cs": "starý"}, {"en": "need", "cs": "potřebovat"}, {"en": "wake up", "cs": "probudit se"}, {"en": "get up", "cs": "vstát"}, {"en": "get", "cs": "dostat / získat"}], "crosswordNote": "Spojení alarm clock, how many times, wake up a get up procvičíš v dalších úlohách.", "crossword": {"rows": 4, "cols": 4, "placements": [{"answer": "OLD", "row": 0, "col": 3, "dir": "down", "clue": "Svisle: Jak řekneš „starý“?"}, {"answer": "GET", "row": 1, "col": 1, "dir": "down", "clue": "Svisle: Jak řekneš „dostat“ nebo „získat“?"}, {"answer": "NEED", "row": 2, "col": 0, "dir": "across", "clue": "Vodorovně: Jak řekneš „potřebovat“?"}], "numbers": {"0,3": 1, "1,1": 2, "2,0": 3}, "solution": [[null, null, null, "O"], [null, "G", null, "L"], ["N", "E", "E", "D"], [null, "T", null, null]]}, "translations": [{"prompt": "budík", "answer": "alarm clock"}, {"prompt": "kolikrát", "answer": "how many times"}, {"prompt": "starý", "answer": "old"}, {"prompt": "potřebovat", "answer": "need"}, {"prompt": "probudit se", "answer": "wake up"}, {"prompt": "vstát", "answer": "get up"}, {"prompt": "dostat / získat", "answer": "get"}]};
   </script>
   <script>
   (function () {
@@ -396,8 +391,7 @@
     const cw = data.crossword;
     const hasCrossword = !!(cw && cw.placements && cw.placements.length);
     const translations = data.translations || [];
-    const fillIns = data.fillIns || [];
-    const total = (hasCrossword ? cw.placements.length : 0) + translations.length + fillIns.length;
+    const total = (hasCrossword ? cw.placements.length : 0) + translations.length;
 
     document.title = data.title;
     document.getElementById("title").textContent = data.title;
@@ -423,8 +417,6 @@
     const inputRefs = {};
     const translationValues = translations.map(function () { return ""; });
     const translationState = translations.map(function () { return "idle"; });
-    const fillValues = fillIns.map(function () { return ""; });
-    const fillState = fillIns.map(function () { return "idle"; });
 
     function key(r, c) { return r + "," + c; }
 
@@ -476,7 +468,7 @@
     }
 
     function score() {
-      return crosswordScore() + countCorrect(translationState) + countCorrect(fillState);
+      return crosswordScore() + countCorrect(translationState);
     }
 
     function nextLetterCell(r, c, direction, step) {
@@ -768,10 +760,8 @@
       crosswordRevealed = false;
       for (let i = 0; i < translationValues.length; i++) translationValues[i] = "";
       for (let i = 0; i < translationState.length; i++) translationState[i] = "idle";
-      for (let i = 0; i < fillValues.length; i++) fillValues[i] = "";
-      for (let i = 0; i < fillState.length; i++) fillState[i] = "idle";
-      document.querySelectorAll("#translations input, #fillins input").forEach(function (el) { el.value = ""; });
-      document.querySelectorAll("#translations .task, #fillins .task").forEach(function (node) {
+      document.querySelectorAll("#translations input").forEach(function (el) { el.value = ""; });
+      document.querySelectorAll("#translations .task").forEach(function (node) {
         node.classList.remove("ok", "bad");
         const feedback = node.querySelector(".feedback");
         const extra = node.querySelector(".answer-hint");
@@ -785,7 +775,7 @@
     /* ---------- Finále: Střelnice slovíček ---------- */
     let shootUnlocked = false;
     const shoot = window.__shoot = {
-      running: false, order: [], idx: 0, bubbles: [], startTs: 0, raf: 0, tick: 0, lastTs: 0, speedMul: 1, round: 0, roundWords: [], usedBasic: {}
+      running: false, order: [], idx: 0, bubbles: [], startTs: 0, raf: 0, tick: 0, lastTs: 0, speedMul: 1, round: 0, roundWords: [], usedReviewed: {}
     };
     const shootWords = (function () {
       const seen = {};
@@ -797,13 +787,18 @@
       });
     })();
 
-    const BASIC_WORDS = [{"en": "mother", "cs": "maminka"}, {"en": "father", "cs": "tatínek"}, {"en": "sister", "cs": "sestra"}, {"en": "brother", "cs": "bratr"}, {"en": "grandmother", "cs": "babička"}, {"en": "grandfather", "cs": "dědeček"}, {"en": "baby", "cs": "miminko"}, {"en": "family", "cs": "rodina"}, {"en": "son", "cs": "syn"}, {"en": "daughter", "cs": "dcera"}, {"en": "aunt", "cs": "teta"}, {"en": "uncle", "cs": "strýc"}, {"en": "friend", "cs": "kamarád"}, {"en": "boy", "cs": "chlapec"}, {"en": "girl", "cs": "dívka"}, {"en": "man", "cs": "muž"}, {"en": "woman", "cs": "žena"}, {"en": "red", "cs": "červená"}, {"en": "blue", "cs": "modrá"}, {"en": "green", "cs": "zelená"}, {"en": "yellow", "cs": "žlutá"}, {"en": "black", "cs": "černá"}, {"en": "white", "cs": "bílá"}, {"en": "orange", "cs": "oranžová"}, {"en": "pink", "cs": "růžová"}, {"en": "brown", "cs": "hnědá"}, {"en": "grey", "cs": "šedá"}, {"en": "purple", "cs": "fialová"}, {"en": "one", "cs": "jedna"}, {"en": "two", "cs": "dva"}, {"en": "three", "cs": "tři"}, {"en": "four", "cs": "čtyři"}, {"en": "five", "cs": "pět"}, {"en": "six", "cs": "šest"}, {"en": "seven", "cs": "sedm"}, {"en": "eight", "cs": "osm"}, {"en": "nine", "cs": "devět"}, {"en": "ten", "cs": "deset"}, {"en": "eleven", "cs": "jedenáct"}, {"en": "twelve", "cs": "dvanáct"}, {"en": "twenty", "cs": "dvacet"}, {"en": "hundred", "cs": "sto"}, {"en": "dog", "cs": "pes"}, {"en": "cat", "cs": "kočka"}, {"en": "horse", "cs": "kůň"}, {"en": "cow", "cs": "kráva"}, {"en": "pig", "cs": "prase"}, {"en": "sheep", "cs": "ovce"}, {"en": "duck", "cs": "kachna"}, {"en": "hen", "cs": "slepice"}, {"en": "mouse", "cs": "myš"}, {"en": "rabbit", "cs": "králík"}, {"en": "bird", "cs": "pták"}, {"en": "fish", "cs": "ryba"}, {"en": "frog", "cs": "žába"}, {"en": "bear", "cs": "medvěd"}, {"en": "lion", "cs": "lev"}, {"en": "tiger", "cs": "tygr"}, {"en": "elephant", "cs": "slon"}, {"en": "monkey", "cs": "opice"}, {"en": "snake", "cs": "had"}, {"en": "fox", "cs": "liška"}, {"en": "wolf", "cs": "vlk"}, {"en": "owl", "cs": "sova"}, {"en": "bee", "cs": "včela"}, {"en": "spider", "cs": "pavouk"}, {"en": "giraffe", "cs": "žirafa"}, {"en": "turtle", "cs": "želva"}, {"en": "butterfly", "cs": "motýl"}, {"en": "goat", "cs": "koza"}, {"en": "apple", "cs": "jablko"}, {"en": "banana", "cs": "banán"}, {"en": "pear", "cs": "hruška"}, {"en": "bread", "cs": "chléb"}, {"en": "butter", "cs": "máslo"}, {"en": "cheese", "cs": "sýr"}, {"en": "milk", "cs": "mléko"}, {"en": "egg", "cs": "vejce"}, {"en": "water", "cs": "voda"}, {"en": "juice", "cs": "džus"}, {"en": "tea", "cs": "čaj"}, {"en": "soup", "cs": "polévka"}, {"en": "rice", "cs": "rýže"}, {"en": "meat", "cs": "maso"}, {"en": "cake", "cs": "dort"}, {"en": "sugar", "cs": "cukr"}, {"en": "salt", "cs": "sůl"}, {"en": "potato", "cs": "brambora"}, {"en": "tomato", "cs": "rajče"}, {"en": "carrot", "cs": "mrkev"}, {"en": "strawberry", "cs": "jahoda"}, {"en": "lemon", "cs": "citron"}, {"en": "ice cream", "cs": "zmrzlina"}, {"en": "chocolate", "cs": "čokoláda"}, {"en": "breakfast", "cs": "snídaně"}, {"en": "lunch", "cs": "oběd"}, {"en": "honey", "cs": "med"}, {"en": "cherry", "cs": "třešeň"}, {"en": "school", "cs": "škola"}, {"en": "teacher", "cs": "učitel"}, {"en": "pupil", "cs": "žák"}, {"en": "book", "cs": "kniha"}, {"en": "pen", "cs": "pero"}, {"en": "pencil", "cs": "tužka"}, {"en": "eraser", "cs": "guma"}, {"en": "ruler", "cs": "pravítko"}, {"en": "bag", "cs": "taška"}, {"en": "chair", "cs": "židle"}, {"en": "table", "cs": "stůl"}, {"en": "classroom", "cs": "třída"}, {"en": "homework", "cs": "domácí úkol"}, {"en": "board", "cs": "tabule"}, {"en": "exercise book", "cs": "sešit"}, {"en": "crayon", "cs": "pastelka"}, {"en": "scissors", "cs": "nůžky"}, {"en": "glue", "cs": "lepidlo"}, {"en": "map", "cs": "mapa"}, {"en": "computer", "cs": "počítač"}, {"en": "letter", "cs": "dopis"}, {"en": "head", "cs": "hlava"}, {"en": "eye", "cs": "oko"}, {"en": "ear", "cs": "ucho"}, {"en": "nose", "cs": "nos"}, {"en": "mouth", "cs": "ústa"}, {"en": "tooth", "cs": "zub"}, {"en": "hair", "cs": "vlasy"}, {"en": "hand", "cs": "ruka"}, {"en": "leg", "cs": "noha"}, {"en": "finger", "cs": "prst"}, {"en": "knee", "cs": "koleno"}, {"en": "back", "cs": "záda"}, {"en": "neck", "cs": "krk"}, {"en": "face", "cs": "obličej"}, {"en": "shoulder", "cs": "rameno"}, {"en": "stomach", "cs": "břicho"}, {"en": "house", "cs": "dům"}, {"en": "flat", "cs": "byt"}, {"en": "room", "cs": "pokoj"}, {"en": "kitchen", "cs": "kuchyně"}, {"en": "bathroom", "cs": "koupelna"}, {"en": "bedroom", "cs": "ložnice"}, {"en": "garden", "cs": "zahrada"}, {"en": "door", "cs": "dveře"}, {"en": "window", "cs": "okno"}, {"en": "bed", "cs": "postel"}, {"en": "sofa", "cs": "gauč"}, {"en": "lamp", "cs": "lampa"}, {"en": "floor", "cs": "podlaha"}, {"en": "wall", "cs": "zeď"}, {"en": "roof", "cs": "střecha"}, {"en": "stairs", "cs": "schody"}, {"en": "key", "cs": "klíč"}, {"en": "clock", "cs": "hodiny"}, {"en": "cup", "cs": "hrnek"}, {"en": "plate", "cs": "talíř"}, {"en": "spoon", "cs": "lžíce"}, {"en": "fork", "cs": "vidlička"}, {"en": "knife", "cs": "nůž"}, {"en": "toy", "cs": "hračka"}, {"en": "ball", "cs": "míč"}, {"en": "phone", "cs": "telefon"}, {"en": "picture", "cs": "obrázek"}, {"en": "T-shirt", "cs": "tričko"}, {"en": "shirt", "cs": "košile"}, {"en": "trousers", "cs": "kalhoty"}, {"en": "skirt", "cs": "sukně"}, {"en": "dress", "cs": "šaty"}, {"en": "coat", "cs": "kabát"}, {"en": "jacket", "cs": "bunda"}, {"en": "hat", "cs": "klobouk"}, {"en": "sock", "cs": "ponožka"}, {"en": "shoe", "cs": "bota"}, {"en": "scarf", "cs": "šála"}, {"en": "gloves", "cs": "rukavice"}, {"en": "sweater", "cs": "svetr"}, {"en": "pyjamas", "cs": "pyžamo"}, {"en": "sun", "cs": "slunce"}, {"en": "rain", "cs": "déšť"}, {"en": "snow", "cs": "sníh"}, {"en": "wind", "cs": "vítr"}, {"en": "cloud", "cs": "mrak"}, {"en": "sky", "cs": "obloha"}, {"en": "tree", "cs": "strom"}, {"en": "flower", "cs": "květina"}, {"en": "grass", "cs": "tráva"}, {"en": "river", "cs": "řeka"}, {"en": "sea", "cs": "moře"}, {"en": "mountain", "cs": "hora"}, {"en": "moon", "cs": "měsíc"}, {"en": "star", "cs": "hvězda"}, {"en": "rainbow", "cs": "duha"}, {"en": "forest", "cs": "les"}, {"en": "lake", "cs": "jezero"}, {"en": "day", "cs": "den"}, {"en": "night", "cs": "noc"}, {"en": "morning", "cs": "ráno"}, {"en": "evening", "cs": "večer"}, {"en": "week", "cs": "týden"}, {"en": "year", "cs": "rok"}, {"en": "today", "cs": "dnes"}, {"en": "tomorrow", "cs": "zítra"}, {"en": "yesterday", "cs": "včera"}, {"en": "birthday", "cs": "narozeniny"}, {"en": "car", "cs": "auto"}, {"en": "bus", "cs": "autobus"}, {"en": "train", "cs": "vlak"}, {"en": "bike", "cs": "kolo"}, {"en": "plane", "cs": "letadlo"}, {"en": "boat", "cs": "loď"}, {"en": "shop", "cs": "obchod"}, {"en": "street", "cs": "ulice"}, {"en": "town", "cs": "město"}, {"en": "village", "cs": "vesnice"}, {"en": "doctor", "cs": "doktor"}, {"en": "hospital", "cs": "nemocnice"}, {"en": "money", "cs": "peníze"}, {"en": "present", "cs": "dárek"}, {"en": "game", "cs": "hra"}, {"en": "music", "cs": "hudba"}, {"en": "run", "cs": "běhat"}, {"en": "jump", "cs": "skákat"}, {"en": "swim", "cs": "plavat"}, {"en": "read", "cs": "číst"}, {"en": "write", "cs": "psát"}, {"en": "sing", "cs": "zpívat"}, {"en": "dance", "cs": "tancovat"}, {"en": "eat", "cs": "jíst"}, {"en": "drink", "cs": "pít"}, {"en": "sleep", "cs": "spát"}, {"en": "play", "cs": "hrát"}, {"en": "go", "cs": "jít"}, {"en": "come", "cs": "přijít"}, {"en": "see", "cs": "vidět"}, {"en": "look", "cs": "dívat se"}, {"en": "listen", "cs": "poslouchat"}, {"en": "speak", "cs": "mluvit"}, {"en": "open", "cs": "otevřít"}, {"en": "close", "cs": "zavřít"}, {"en": "sit", "cs": "sedět"}, {"en": "stand", "cs": "stát"}, {"en": "draw", "cs": "kreslit"}, {"en": "cook", "cs": "vařit"}, {"en": "help", "cs": "pomáhat"}, {"en": "love", "cs": "milovat"}, {"en": "want", "cs": "chtít"}, {"en": "give", "cs": "dát"}, {"en": "take", "cs": "vzít"}, {"en": "buy", "cs": "koupit"}, {"en": "fly", "cs": "létat"}, {"en": "climb", "cs": "lézt"}, {"en": "wash", "cs": "mýt"}, {"en": "learn", "cs": "učit se"}, {"en": "think", "cs": "myslet"}, {"en": "know", "cs": "vědět"}, {"en": "cry", "cs": "plakat"}, {"en": "laugh", "cs": "smát se"}, {"en": "wait", "cs": "čekat"}, {"en": "big", "cs": "velký"}, {"en": "small", "cs": "malý"}, {"en": "long", "cs": "dlouhý"}, {"en": "short", "cs": "krátký"}, {"en": "tall", "cs": "vysoký"}, {"en": "happy", "cs": "šťastný"}, {"en": "sad", "cs": "smutný"}, {"en": "new", "cs": "nový"}, {"en": "old", "cs": "starý"}, {"en": "young", "cs": "mladý"}, {"en": "fast", "cs": "rychlý"}, {"en": "slow", "cs": "pomalý"}, {"en": "beautiful", "cs": "krásný"}, {"en": "ugly", "cs": "ošklivý"}, {"en": "clean", "cs": "čistý"}, {"en": "dirty", "cs": "špinavý"}, {"en": "easy", "cs": "snadný"}, {"en": "difficult", "cs": "těžký"}, {"en": "funny", "cs": "vtipný"}, {"en": "hungry", "cs": "hladový"}, {"en": "thirsty", "cs": "žíznivý"}, {"en": "tired", "cs": "unavený"}, {"en": "strong", "cs": "silný"}, {"en": "kind", "cs": "laskavý"}, {"en": "loud", "cs": "hlasitý"}, {"en": "quiet", "cs": "tichý"}, {"en": "full", "cs": "plný"}, {"en": "empty", "cs": "prázdný"}, {"en": "soft", "cs": "měkký"}, {"en": "hard", "cs": "tvrdý"}, {"en": "wet", "cs": "mokrý"}, {"en": "dry", "cs": "suchý"}, {"en": "hot", "cs": "horký"}, {"en": "cold", "cs": "studený"}, {"en": "warm", "cs": "teplý"}];
-    const basicPool = (function () {
-      const lessonEn = {}, lessonCs = {};
+    const REVIEWED_WORDS = [{"en": "naughty", "cs": "zlobivý"}, {"en": "grumpy", "cs": "mrzutý / nevrlý"}, {"en": "dwarf", "cs": "trpaslík"}, {"en": "only", "cs": "jen / pouze"}, {"en": "for a short time", "cs": "na krátkou dobu"}, {"en": "user", "cs": "uživatel"}, {"en": "password", "cs": "heslo"}, {"en": "well", "cs": "dobře"}, {"en": "draw", "cs": "kreslit"}, {"en": "paint", "cs": "malovat"}, {"en": "wedding", "cs": "svatba"}, {"en": "speak", "cs": "mluvit"}, {"en": "school bag", "cs": "školní taška / aktovka"}, {"en": "Hold on.", "cs": "Počkej. / Vydrž."}, {"en": "waltz", "cs": "valčík"}, {"en": "skyscraper", "cs": "mrakodrap"}, {"en": "desk", "cs": "lavice / psací stůl"}, {"en": "teach", "cs": "učit (někoho)"}, {"en": "learn", "cs": "učit se"}, {"en": "poster", "cs": "plakát"}, {"en": "made from paper", "cs": "vyrobený z papíru"}, {"en": "guess", "cs": "hádat"}, {"en": "something", "cs": "něco"}, {"en": "bowl", "cs": "miska"}, {"en": "What about...?", "cs": "Co kdyby...? / A co...?"}, {"en": "How about...?", "cs": "Co kdyby...? / A co...?"}, {"en": "hard", "cs": "těžký / tvrdý"}, {"en": "long", "cs": "dlouhý"}, {"en": "run", "cs": "běhat / běžet"}, {"en": "kick", "cs": "kopnout"}, {"en": "score", "cs": "skórovat / dát gól"}, {"en": "often", "cs": "často"}, {"en": "three times a week", "cs": "třikrát týdně"}, {"en": "do homework", "cs": "dělat domácí úkol"}, {"en": "fast", "cs": "rychlý / rychle"}, {"en": "skate", "cs": "bruslit"}, {"en": "Can you come tomorrow?", "cs": "Můžeš přijít zítra?"}, {"en": "why", "cs": "proč"}, {"en": "Why can't you come tomorrow?", "cs": "Proč nemůžeš přijít zítra?"}, {"en": "I am sorry.", "cs": "Promiň. / Je mi líto."}, {"en": "I can't understand.", "cs": "Nerozumím."}, {"en": "Can you repeat it?", "cs": "Můžeš to zopakovat?"}, {"en": "Can you say it again?", "cs": "Můžeš to říct znovu?"}, {"en": "I was", "cs": "byl jsem"}, {"en": "I will be", "cs": "budu"}, {"en": "I will play", "cs": "budu hrát"}, {"en": "because", "cs": "protože"}, {"en": "haunted", "cs": "strašidelný"}, {"en": "nature", "cs": "příroda"}, {"en": "subject", "cs": "předmět (ve škole)"}, {"en": "language", "cs": "jazyk"}, {"en": "ill", "cs": "nemocný"}, {"en": "ski", "cs": "lyžovat"}, {"en": "come", "cs": "přijít / přijet"}, {"en": "watch TV", "cs": "dívat se na televizi"}, {"en": "must", "cs": "muset"}, {"en": "ham", "cs": "šunka"}, {"en": "bread", "cs": "chléb"}, {"en": "yesterday", "cs": "včera"}, {"en": "today", "cs": "dnes"}, {"en": "tomorrow", "cs": "zítra"}, {"en": "food", "cs": "jídlo"}, {"en": "plate", "cs": "talíř"}, {"en": "spoon", "cs": "lžíce"}, {"en": "fork", "cs": "vidlička"}, {"en": "knife", "cs": "nůž"}, {"en": "glass", "cs": "sklenice"}, {"en": "cup", "cs": "šálek"}, {"en": "mug", "cs": "hrnek"}, {"en": "clock", "cs": "hodiny"}, {"en": "bin", "cs": "koš"}, {"en": "headphones", "cs": "sluchátka"}, {"en": "washbasin", "cs": "umyvadlo"}, {"en": "mustard", "cs": "hořčice"}, {"en": "mustn't", "cs": "nesmět"}, {"en": "onion", "cs": "cibule"}, {"en": "lettuce", "cs": "hlávkový salát"}, {"en": "carrot", "cs": "mrkev"}, {"en": "cucumber", "cs": "okurka"}, {"en": "cheeky", "cs": "drzý"}, {"en": "pass", "cs": "přihrát / podat"}, {"en": "Pass me the ball.", "cs": "Přihráj mi míč. / Podej mi míč."}, {"en": "Could you pass me...?", "cs": "Mohl bys mi podat...?"}, {"en": "thirsty", "cs": "žíznivý"}, {"en": "I dunno.", "cs": "Nevím. (hovorově)"}, {"en": "I don't know.", "cs": "Nevím."}, {"en": "celebrate", "cs": "slavit"}, {"en": "have a party", "cs": "pořádat oslavu"}, {"en": "go", "cs": "jít / jet"}, {"en": "every other day", "cs": "obden"}, {"en": "drums", "cs": "bicí"}, {"en": "sing", "cs": "zpívat"}, {"en": "song", "cs": "písnička"}, {"en": "where", "cs": "kde"}, {"en": "who", "cs": "kdo"}, {"en": "when", "cs": "kdy"}, {"en": "what", "cs": "co"}, {"en": "whose", "cs": "čí"}, {"en": "maybe", "cs": "možná / asi"}, {"en": "goal", "cs": "branka"}, {"en": "goalkeeper", "cs": "brankář"}, {"en": "ghost", "cs": "duch"}, {"en": "witch", "cs": "čarodějnice"}, {"en": "Trick or treat.", "cs": "Sladkosti, nebo vám něco provedu!"}, {"en": "candle", "cs": "svíčka"}, {"en": "pumpkin", "cs": "dýně"}, {"en": "spider", "cs": "pavouk"}, {"en": "bat", "cs": "netopýr"}, {"en": "skeleton", "cs": "kostra"}, {"en": "creepy", "cs": "děsivý / strašidelný"}, {"en": "Boo!", "cs": "Bú!"}, {"en": "of course", "cs": "samozřejmě"}, {"en": "wear", "cs": "nosit (na sobě)"}, {"en": "pyjamas", "cs": "pyžamo"}, {"en": "how", "cs": "jak"}, {"en": "half", "cs": "půl / polovina"}, {"en": "good", "cs": "dobrý"}, {"en": "better", "cs": "lepší"}, {"en": "the best", "cs": "nejlepší"}, {"en": "bad", "cs": "špatný"}, {"en": "worse", "cs": "horší"}, {"en": "the worst", "cs": "nejhorší"}, {"en": "injured", "cs": "zraněný"}, {"en": "injury", "cs": "zranění"}, {"en": "shout", "cs": "křičet"}, {"en": "cry", "cs": "plakat"}, {"en": "package", "cs": "balíček"}, {"en": "collect", "cs": "sbírat / vyzvednout"}, {"en": "more", "cs": "víc / více"}, {"en": "less", "cs": "míň / méně"}, {"en": "How much is...?", "cs": "Kolik stojí...?"}, {"en": "inside", "cs": "uvnitř"}, {"en": "outside", "cs": "venku / venkovní"}, {"en": "good at", "cs": "dobrý v (něčem)"}, {"en": "bad at", "cs": "špatný v (něčem)"}, {"en": "before", "cs": "před / předtím"}, {"en": "after", "cs": "po / potom"}, {"en": "dinner", "cs": "večeře"}, {"en": "alarm clock", "cs": "budík"}, {"en": "how many times", "cs": "kolikrát"}, {"en": "old", "cs": "starý"}, {"en": "need", "cs": "potřebovat"}, {"en": "wake up", "cs": "probudit se"}, {"en": "get up", "cs": "vstát"}, {"en": "get", "cs": "dostat / získat"}];
+    const reviewedPool = (function () {
+      const lessonEn = {}, lessonCs = {}, seen = {};
       shootWords.forEach(function (w) { lessonEn[normalize(w.en)] = 1; lessonCs[normalize(w.cs)] = 1; });
-      return BASIC_WORDS.filter(function (w) {
-        return !lessonEn[normalize(w.en)] && !lessonCs[normalize(w.cs)];
+      const pool = [];
+      REVIEWED_WORDS.forEach(function (w) {
+        const enKey = normalize(w.en);
+        if (!enKey || seen[enKey] || lessonEn[enKey] || lessonCs[normalize(w.cs)]) return;
+        seen[enKey] = 1;
+        pool.push({ en: w.en, cs: w.cs });
       });
+      return pool;
     })();
     const SWAP_PER_ROUND = 2;
 
@@ -815,7 +810,6 @@
       const miss = [];
       if (hasCrossword && !crosswordSolved()) miss.push("křížovku");
       if (translations.length && countCorrect(translationState) < translations.length) miss.push("překlady do angličtiny");
-      if (fillIns.length && countCorrect(fillState) < fillIns.length) miss.push("doplňování vět");
       return miss;
     }
 
@@ -823,7 +817,7 @@
       if (shootUnlocked) return;
       const miss = missingParts();
       if (!miss.length) {
-        unlockShoot(hasCrossword || translations.length > 0 || fillIns.length > 0);
+        unlockShoot(hasCrossword || translations.length > 0);
       } else {
         document.getElementById("shoot-missing").textContent = "Ještě dokonči: " + miss.join(", ") + ".";
       }
@@ -831,25 +825,31 @@
 
     function buildRoundWords(round) {
       const n = shootWords.length;
-      if (round <= 1 || !basicPool.length) return shootWords.slice();
+      if (round <= 1 || !reviewedPool.length) return shootWords.slice();
       const maxNew = Math.max(0, n - 1);
-      const newCount = Math.min(maxNew, (round - 1) * SWAP_PER_ROUND, basicPool.length);
+      const newCount = Math.min(maxNew, (round - 1) * SWAP_PER_ROUND, reviewedPool.length);
       const kept = shuffle(shootWords).slice(0, n - newCount);
-      const usedCs = {};
-      kept.forEach(function (w) { usedCs[normalize(w.cs)] = 1; });
-      let fresh = basicPool.filter(function (w) { return !shoot.usedBasic[normalize(w.en)]; });
-      if (fresh.length < newCount) { shoot.usedBasic = {}; fresh = basicPool.slice(); }
+      const usedEn = {}, usedCs = {};
+      kept.forEach(function (w) {
+        usedEn[normalize(w.en)] = 1;
+        usedCs[normalize(w.cs)] = 1;
+      });
+      let fresh = reviewedPool.filter(function (w) { return !shoot.usedReviewed[normalize(w.en)]; });
+      if (fresh.length < newCount) { shoot.usedReviewed = {}; fresh = reviewedPool.slice(); }
       const picked = [];
       shuffle(fresh).forEach(function (w) {
         if (picked.length >= newCount) return;
-        const k = normalize(w.cs);
-        if (usedCs[k]) return;
-        usedCs[k] = 1;
+        const enKey = normalize(w.en);
+        const csKey = normalize(w.cs);
+        if (usedEn[enKey] || usedCs[csKey]) return;
+        usedEn[enKey] = 1;
+        usedCs[csKey] = 1;
         picked.push(w);
-        shoot.usedBasic[normalize(w.en)] = 1;
+        shoot.usedReviewed[enKey] = 1;
       });
       return kept.concat(picked);
     }
+    window.__buildRoundWords = buildRoundWords;
 
     function unlockShoot(announce) {
       shootUnlocked = true;
@@ -1073,9 +1073,9 @@
       } catch (e) { bestText = ""; }
       document.getElementById("shoot-best").textContent = bestText;
       document.getElementById("shoot-done-title").textContent = "🏆 Kolo " + shoot.round + " hotové! Skvělá práce!";
-      const lessonLeft = shootWords.length - Math.min(Math.max(0, shootWords.length - 1), shoot.round * SWAP_PER_ROUND, basicPool.length);
-      document.getElementById("shoot-next-note").textContent = basicPool.length
-        ? (lessonLeft <= 1 ? "V dalším kole už budou skoro všechna slovíčka nová." : "V dalším kole přibydou nová slovíčka mimo lekci.")
+      const lessonLeft = shootWords.length - Math.min(Math.max(0, shootWords.length - 1), shoot.round * SWAP_PER_ROUND, reviewedPool.length);
+      document.getElementById("shoot-next-note").textContent = reviewedPool.length
+        ? (lessonLeft <= 1 ? "V dalším kole už budou skoro všechna slovíčka z dřívějších lekcí." : "V dalším kole přibydou další už probraná slovíčka z předchozích lekcí.")
         : "";
       document.getElementById("shoot-done").hidden = false;
       setShootFeedback("Hotovo za " + t + ". Výborně! 🏆", "ok");
@@ -1096,9 +1096,7 @@
 
     buildCrossword();
     if (!translations.length) document.getElementById("translation-section").hidden = true;
-    if (!fillIns.length) document.getElementById("fill-section").hidden = true;
     buildTextTasks("translations", translations, translationValues, translationState, "napiš anglicky", false);
-    buildTextTasks("fillins", fillIns, fillValues, fillState, "chybějící slovo", true);
     document.getElementById("btn-reset").addEventListener("click", resetAll);
     updateCells();
     updateScore();
