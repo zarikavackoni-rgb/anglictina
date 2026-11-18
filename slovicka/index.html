@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#e8f3ff">
+  <meta name="color-scheme" content="light">
+  <title>Slovíčka – Jan</title>
+  <style>
+    :root {
+      --sky: #e8f3ff;
+      --paper: #ffffff;
+      --ink: #1a2744;
+      --muted: #3d4d6a;
+      --line: #c9d6ea;
+      --blue: #1d64c2;
+      --blue-soft: #d6e7ff;
+      --soft: #f4f8ff;
+      --shadow: 0 10px 30px rgba(26, 39, 68, 0.08);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 1.4rem 1rem 3rem;
+      font-family: "Trebuchet MS", "Segoe UI", system-ui, sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(1200px 500px at 8% -10%, #cfe6ff 0%, transparent 50%),
+        radial-gradient(800px 420px at 100% 0%, #ffe9c8 0%, transparent 46%),
+        var(--sky);
+      line-height: 1.5;
+    }
+    .wrap { width: min(54rem, 100%); margin: 0 auto; }
+    .back {
+      display: inline-block;
+      margin: 0 0 0.85rem;
+      color: var(--blue);
+      text-decoration: none;
+      font-weight: 700;
+    }
+    .back:hover, .back:focus-visible { text-decoration: underline; }
+    h1 { margin: 0 0 0.45rem; font-size: clamp(1.7rem, 5vw, 2.2rem); line-height: 1.2; }
+    .intro { margin: 0 0 1.1rem; color: var(--muted); font-size: 1.08rem; }
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.7rem;
+      align-items: center;
+      margin: 0 0 1.1rem;
+    }
+    label.sr {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+    }
+    input[type="search"] {
+      flex: 1 1 14rem;
+      min-width: 0;
+      font: inherit;
+      font-size: 1.05rem;
+      padding: 0.7rem 0.9rem;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--paper);
+      color: var(--ink);
+      box-shadow: var(--shadow);
+    }
+    input[type="search"]:focus-visible {
+      outline: 3px solid #8cb6f0;
+      border-color: var(--blue);
+    }
+    select {
+      font: inherit;
+      font-size: 1.02rem;
+      padding: 0.65rem 0.8rem;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--paper);
+      color: var(--ink);
+      box-shadow: var(--shadow);
+    }
+    .count { margin: 0 0 1rem; color: var(--muted); }
+    .lesson { margin: 0 0 1.3rem; }
+    .lesson-head {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 0.35rem 1rem;
+      margin: 0 0 0.55rem;
+    }
+    .lesson-head h2 {
+      margin: 0;
+      font-size: 1.2rem;
+      color: var(--blue);
+    }
+    .lesson-head a {
+      color: var(--blue);
+      font-weight: 700;
+      text-decoration: none;
+    }
+    .lesson-head a:hover, .lesson-head a:focus-visible { text-decoration: underline; }
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    th, td {
+      text-align: left;
+      padding: 0.75rem 0.9rem;
+      vertical-align: top;
+    }
+    th {
+      background: var(--blue-soft);
+      font-size: 0.92rem;
+      letter-spacing: 0.02em;
+      color: var(--muted);
+    }
+    tbody tr + tr td { border-top: 1px solid var(--line); }
+    tbody tr:nth-child(even) { background: var(--soft); }
+    .en {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.45rem;
+      font-weight: 700;
+      font-size: 1.08rem;
+    }
+    .cz { color: var(--ink); }
+    .expl { color: var(--muted); }
+    button.speak {
+      flex: 0 0 auto;
+      width: 2.15rem;
+      height: 2.15rem;
+      margin-top: -0.15rem;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #fff;
+      color: var(--blue);
+      font-size: 1.05rem;
+      line-height: 1;
+      cursor: pointer;
+      padding: 0;
+    }
+    button.speak:hover, button.speak:focus-visible {
+      border-color: var(--blue);
+      outline: 3px solid #8cb6f0;
+    }
+    button.speak[aria-pressed="true"] { background: var(--blue-soft); }
+    .empty {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      padding: 1.1rem 1.2rem;
+      color: var(--muted);
+    }
+    .error { color: #8b1c1c; }
+    @media (max-width: 680px) {
+      thead { display: none; }
+      table, tbody, tr, td { display: block; width: 100%; }
+      table { border: 0; background: transparent; box-shadow: none; overflow: visible; }
+      tbody tr {
+        background: var(--paper);
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        box-shadow: var(--shadow);
+        padding: 0.75rem 0.9rem 0.85rem;
+        margin: 0 0 0.65rem;
+      }
+      tbody tr + tr td { border-top: 0; }
+      tbody tr:nth-child(even) { background: var(--paper); }
+      td { padding: 0.15rem 0; }
+      td.cz::before,
+      td.expl::before {
+        display: block;
+        font-size: 0.78rem;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: var(--muted);
+        content: attr(data-label);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <a class="back" href="../">← Zpět na hry</a>
+    <h1>Slovíčka – Jan</h1>
+    <p class="intro">Tady jsou všechna slovíčka z lekcí. Můžeš je hledat, řadit podle data a poslechnout si, jak se řeknou anglicky.</p>
+    <div class="toolbar">
+      <label class="sr" for="q">Hledat slovíčko</label>
+      <input id="q" type="search" placeholder="Hledat slovíčko…" autocomplete="off" enterkeyhint="search">
+      <label class="sr" for="sort">Řazení</label>
+      <select id="sort">
+        <option value="date-desc">Nejnovější lekce</option>
+        <option value="date-asc">Nejstarší lekce</option>
+        <option value="en">Podle abecedy (EN)</option>
+      </select>
+    </div>
+    <p class="count" id="count"></p>
+    <div id="list"></div>
+  </div>
+  <script>
+    const CSV_URL = "../slovicka.csv";
+    const listEl = document.getElementById("list");
+    const countEl = document.getElementById("count");
+    const searchEl = document.getElementById("q");
+    const sortEl = document.getElementById("sort");
+    let words = [];
+    let voicesReady = false;
+
+    function parseCsv(text) {
+      text = String(text || "").replace(/^\uFEFF/, "");
+      const rows = [];
+      let row = [];
+      let cell = "";
+      let inQuotes = false;
+      for (let i = 0; i < text.length; i += 1) {
+        const c = text[i];
+        const next = text[i + 1];
+        if (inQuotes) {
+          if (c === '"' && next === '"') { cell += '"'; i += 1; }
+          else if (c === '"') inQuotes = false;
+          else cell += c;
+        } else if (c === '"') {
+          inQuotes = true;
+        } else if (c === ",") {
+          row.push(cell);
+          cell = "";
+        } else if (c === "\n" || c === "\r") {
+          if (c === "\r" && next === "\n") i += 1;
+          row.push(cell);
+          cell = "";
+          if (row.some((part) => part !== "")) rows.push(row);
+          row = [];
+        } else {
+          cell += c;
+        }
+      }
+      if (cell !== "" || row.length) {
+        row.push(cell);
+        rows.push(row);
+      }
+      if (!rows.length) return [];
+      const header = rows.shift().map((name) => name.trim());
+      return rows.map((parts) => {
+        const item = {};
+        header.forEach((name, index) => {
+          item[name] = String(parts[index] || "").trim();
+        });
+        return item;
+      }).filter((item) => item.en && item.lesson_date);
+    }
+
+    function formatDateCs(iso) {
+      const parts = String(iso).split("-");
+      if (parts.length !== 3) return iso;
+      return `${Number(parts[2])}. ${Number(parts[1])}. ${parts[0]}`;
+    }
+
+    function czechCount(n) {
+      if (n === 1) return "1 slovíčko";
+      if (n >= 2 && n <= 4) return `${n} slovíčka`;
+      return `${n} slovíček`;
+    }
+
+    function czechLessons(n) {
+      if (n === 1) return "1 lekce";
+      if (n >= 2 && n <= 4) return `${n} lekce`;
+      return `${n} lekcí`;
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+
+    function pickVoice() {
+      const voices = window.speechSynthesis ? speechSynthesis.getVoices() : [];
+      return voices.find((v) => /^en-GB/i.test(v.lang))
+        || voices.find((v) => /^en-US/i.test(v.lang))
+        || voices.find((v) => /^en/i.test(v.lang))
+        || null;
+    }
+
+    function primeSpeech() {
+      if (!window.speechSynthesis || voicesReady) return;
+      const silent = new SpeechSynthesisUtterance(" ");
+      silent.volume = 0;
+      silent.rate = 1;
+      speechSynthesis.speak(silent);
+      voicesReady = true;
+    }
+
+    function speak(word, button) {
+      if (!window.speechSynthesis) return;
+      primeSpeech();
+      speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(word);
+      const voice = pickVoice();
+      if (voice) utterance.voice = voice;
+      utterance.lang = (voice && voice.lang) || "en-GB";
+      utterance.rate = 0.95;
+      utterance.onstart = () => button.setAttribute("aria-pressed", "true");
+      const done = () => button.setAttribute("aria-pressed", "false");
+      utterance.onend = done;
+      utterance.onerror = done;
+      speechSynthesis.speak(utterance);
+    }
+
+    function filtered() {
+      const q = searchEl.value.trim().toLocaleLowerCase("cs");
+      const items = words.filter((item) => {
+        if (!q) return true;
+        const hay = `${item.en} ${item.cz} ${item.explanation_en}`.toLocaleLowerCase("cs");
+        return hay.includes(q);
+      });
+      const mode = sortEl.value;
+      items.sort((a, b) => {
+        if (mode === "en") {
+          const byEn = a.en.localeCompare(b.en, "en", { sensitivity: "base" });
+          if (byEn) return byEn;
+          return b.lesson_date.localeCompare(a.lesson_date);
+        }
+        const byDate = mode === "date-asc"
+          ? a.lesson_date.localeCompare(b.lesson_date)
+          : b.lesson_date.localeCompare(a.lesson_date);
+        if (byDate) return byDate;
+        return 0;
+      });
+      return items;
+    }
+
+    function group(items) {
+      const groups = [];
+      const index = new Map();
+      items.forEach((item) => {
+        const key = sortEl.value === "en" ? "_az" : item.lesson_date;
+        if (!index.has(key)) {
+          index.set(key, groups.length);
+          groups.push({ key, date: item.lesson_date, items: [] });
+        }
+        groups[index.get(key)].items.push(item);
+      });
+      return groups;
+    }
+
+    function render() {
+      const items = filtered();
+      const lessons = new Set(items.map((item) => item.lesson_date));
+      if (!items.length) {
+        countEl.textContent = words.length
+          ? "Nic se nenašlo."
+          : "Tabulka slovíček je prázdná.";
+        listEl.innerHTML = '<p class="empty">Zkus jiný výraz, nebo vymaž hledání.</p>';
+        if (!words.length) listEl.innerHTML = "";
+        return;
+      }
+      countEl.textContent = `${czechCount(items.length)} z ${czechLessons(lessons.size)}`;
+      const alpha = sortEl.value === "en";
+      listEl.innerHTML = group(items).map((groupItem) => {
+        const title = alpha
+          ? "Podle abecedy"
+          : `Lekce ${formatDateCs(groupItem.date)}`;
+        const gameLink = alpha
+          ? ""
+          : `<a href="../${escapeHtml(groupItem.date)}/">Otevřít hru</a>`;
+        const rows = groupItem.items.map((item) => `
+          <tr>
+            <td>
+              <div class="en">
+                <span>${escapeHtml(item.en)}</span>
+                <button type="button" class="speak" data-en="${escapeHtml(item.en)}" aria-label="Přečíst ${escapeHtml(item.en)}">🔊</button>
+              </div>
+            </td>
+            <td class="cz" data-label="Česky">${escapeHtml(item.cz)}</td>
+            <td class="expl" data-label="Vysvětlení">${escapeHtml(item.explanation_en)}</td>
+          </tr>`).join("");
+        return `
+          <section class="lesson">
+            <div class="lesson-head">
+              <h2>${escapeHtml(title)}</h2>
+              ${gameLink}
+            </div>
+            <table>
+              <thead>
+                <tr>
+                  <th>Anglicky</th>
+                  <th>Česky</th>
+                  <th>Vysvětlení</th>
+                </tr>
+              </thead>
+              <tbody>${rows}</tbody>
+            </table>
+          </section>`;
+      }).join("");
+    }
+
+    listEl.addEventListener("click", (event) => {
+      const button = event.target.closest("button.speak");
+      if (!button) return;
+      speak(button.getAttribute("data-en") || "", button);
+    });
+    searchEl.addEventListener("input", render);
+    sortEl.addEventListener("change", render);
+    if (window.speechSynthesis) {
+      speechSynthesis.getVoices();
+      speechSynthesis.addEventListener("voiceschanged", () => {
+        speechSynthesis.getVoices();
+      });
+    }
+
+    const cacheBust = new URLSearchParams(location.search).get("v") || Date.now();
+    fetch(`${CSV_URL}?v=${encodeURIComponent(cacheBust)}`, { cache: "no-store" })
+      .then((response) => {
+        if (!response.ok) throw new Error("csv");
+        return response.text();
+      })
+      .then((text) => {
+        words = parseCsv(text);
+        render();
+      })
+      .catch(() => {
+        countEl.textContent = "";
+        listEl.innerHTML = '<p class="empty error">Tabulku slovíček se teď nepodařilo načíst. Zkus stránku znovu načíst za chvíli.</p>';
+      });
+  </script>
+</body>
+</html>
