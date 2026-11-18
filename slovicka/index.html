@@ -134,6 +134,7 @@
     }
     .cz { color: var(--ink); }
     .expl { color: var(--muted); }
+    .example { color: var(--ink); font-style: italic; }
     button.speak {
       flex: 0 0 auto;
       width: 2.15rem;
@@ -178,7 +179,8 @@
       tbody tr:nth-child(even) { background: var(--paper); }
       td { padding: 0.15rem 0; }
       td.cz::before,
-      td.expl::before {
+      td.expl::before,
+      td.example[data-label]::before {
         display: block;
         font-size: 0.78rem;
         font-weight: 700;
@@ -187,6 +189,7 @@
         color: var(--muted);
         content: attr(data-label);
       }
+      td.example:empty { display: none; }
     }
   </style>
 </head>
@@ -194,7 +197,7 @@
   <div class="wrap">
     <a class="back" href="../">← Zpět na hry</a>
     <h1>Slovíčka – Jan</h1>
-    <p class="intro">Tady jsou všechna slovíčka z lekcí. Můžeš je hledat, řadit podle data a poslechnout si, jak se řeknou anglicky.</p>
+    <p class="intro">Tady jsou všechna slovíčka z lekcí, i ta starší. Můžeš je hledat, řadit podle data a poslechnout si, jak se řeknou anglicky. U některých je i příklad od paní učitelky.</p>
     <div class="toolbar">
       <label class="sr" for="q">Hledat slovíčko</label>
       <input id="q" type="search" placeholder="Hledat slovíčko…" autocomplete="off" enterkeyhint="search">
@@ -323,7 +326,7 @@
       const q = searchEl.value.trim().toLocaleLowerCase("cs");
       const items = words.filter((item) => {
         if (!q) return true;
-        const hay = `${item.en} ${item.cz} ${item.explanation_en}`.toLocaleLowerCase("cs");
+        const hay = `${item.en} ${item.cz} ${item.explanation_en} ${item.example_en || ""}`.toLocaleLowerCase("cs");
         return hay.includes(q);
       });
       const mode = sortEl.value;
@@ -376,7 +379,11 @@
         const gameLink = alpha
           ? ""
           : `<a href="../${escapeHtml(groupItem.date)}/">Otevřít hru</a>`;
-        const rows = groupItem.items.map((item) => `
+        const rows = groupItem.items.map((item) => {
+          const example = item.example_en
+            ? `<td class="example" data-label="Příklad">${escapeHtml(item.example_en)}</td>`
+            : `<td class="example"></td>`;
+          return `
           <tr>
             <td>
               <div class="en">
@@ -386,7 +393,9 @@
             </td>
             <td class="cz" data-label="Česky">${escapeHtml(item.cz)}</td>
             <td class="expl" data-label="Vysvětlení">${escapeHtml(item.explanation_en)}</td>
-          </tr>`).join("");
+            ${example}
+          </tr>`;
+        }).join("");
         return `
           <section class="lesson">
             <div class="lesson-head">
@@ -399,6 +408,7 @@
                   <th>Anglicky</th>
                   <th>Česky</th>
                   <th>Vysvětlení</th>
+                  <th>Příklad</th>
                 </tr>
               </thead>
               <tbody>${rows}</tbody>

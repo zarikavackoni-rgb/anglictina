@@ -1,15 +1,154 @@
-en,cz,explanation_en,lesson_date
-inside,uvnitř,"In a place, not out of it.",2026-11-12
-outside,venku / venkovní,Not in a building; in the open air.,2026-11-12
-good at,dobrý v (něčem),You can do something well.,2026-11-12
-bad at,špatný v (něčem),You cannot do something well.,2026-11-12
-before,před / předtím,Earlier than something else.,2026-11-12
-after,po / potom,Later than something else.,2026-11-12
-dinner,večeře,The main meal you eat in the evening.,2026-11-12
-alarm clock,budík,A clock that makes a loud sound to wake you up.,2026-11-17
-how many times,kolikrát,A question about the number of times something happens.,2026-11-17
-old,starý,"Not young, or not new.",2026-11-17
-need,potřebovat,You must have something because it is important.,2026-11-17
-wake up,probudit se,To stop sleeping and open your eyes.,2026-11-17
-get up,vstát,To leave your bed and stand up.,2026-11-17
-get,dostat / získat,"To receive something, or to have it given to you.",2026-11-17
+en,cz,explanation_en,example_en,lesson_date
+naughty,zlobivý,A naughty child does things that are not allowed.,,2026-08-20
+grumpy,mrzutý / nevrlý,A grumpy person is in a bad mood and is not nice.,,2026-08-20
+dwarf,trpaslík,"A very small person in a story, like in Snow White.",,2026-08-20
+only,jen / pouze,No more than this; nothing else.,,2026-08-20
+for a short time,na krátkou dobu,Not for long; just for a little while.,,2026-08-20
+user,uživatel,A person who uses a computer or a phone.,,2026-08-20
+password,heslo,A secret word that lets you open your account.,,2026-08-20
+well,dobře,In a good way; you can do something well.,,2026-08-20
+draw,kreslit,To make a picture with a pencil or a pen.,,2026-08-20
+paint,malovat,To make a picture with colours and a brush.,,2026-08-20
+wedding,svatba,A special day when two people get married.,,2026-08-25
+speak,mluvit,To say words; to talk to someone.,,2026-08-25
+school bag,školní taška / aktovka,A bag that you take to school with your books.,,2026-08-27
+Hold on.,Počkej. / Vydrž.,A short way to say 'please wait a moment'.,,2026-08-27
+waltz,valčík,"A dance that people dance in pairs, with music in three.",,2026-08-27
+skyscraper,mrakodrap,A very tall building in a city.,,2026-08-27
+desk,lavice / psací stůl,A table where you sit and write or work.,,2026-08-27
+teach,učit (někoho),To help another person learn something.,My mum will teach me how to play the waltz.,2026-08-27
+learn,učit se,To get new knowledge or a new skill.,I will learn the waltz.,2026-08-27
+poster,plakát,A big picture or notice that you put on a wall.,,2026-09-01
+made from paper,vyrobený z papíru,This thing is built out of paper.,,2026-09-01
+guess,hádat,To try to give the right answer when you are not sure.,,2026-09-01
+something,něco,"A thing, but you do not name it.",,2026-09-01
+bowl,miska,"A deep, round dish that you put food in.",,2026-09-08
+What about...?,Co kdyby...? / A co...?,You say this when you suggest an idea. It means the same as 'How about...?'.,,2026-09-08
+How about...?,Co kdyby...? / A co...?,You say this when you suggest an idea. It means the same as 'What about...?'.,,2026-09-08
+hard,těžký / tvrdý,"Difficult to do, or not soft.",,2026-09-08
+long,dlouhý,Not short; it takes a lot of time or space.,,2026-09-08
+run,běhat / běžet,To move very quickly on your feet.,I was running.,2026-09-08
+kick,kopnout,To hit something with your foot.,,2026-09-08
+score,skórovat / dát gól,To get a point or a goal in a game.,,2026-09-08
+often,často,Many times; again and again.,,2026-09-08
+three times a week,třikrát týdně,You do it on three days every week.,,2026-09-08
+do homework,dělat domácí úkol,To do the school work that the teacher gave you to do at home.,,2026-09-10
+fast,rychlý / rychle,Quick; moving or happening in a short time.,,2026-09-10
+skate,bruslit,To move on ice or on a street with skates.,,2026-09-10
+Can you come tomorrow?,Můžeš přijít zítra?,You ask if this person can come the next day.,,2026-09-10
+why,proč,A question word you use when you want a reason.,,2026-09-10
+Why can't you come tomorrow?,Proč nemůžeš přijít zítra?,You ask for the reason why this person cannot come the next day.,,2026-09-10
+I am sorry.,Promiň. / Je mi líto.,"You say this when you feel bad about something, or you want to apologise.",,2026-09-17
+I can't understand.,Nerozumím.,You say this when you do not know what the words mean.,,2026-09-17
+Can you repeat it?,Můžeš to zopakovat?,You ask someone to say the same words one more time. It means the same as 'Can you say it again?'.,,2026-09-17
+Can you say it again?,Můžeš to říct znovu?,You ask someone to say the same words one more time. It means the same as 'Can you repeat it?'.,,2026-09-17
+I was,byl jsem,The past form of 'I am'; it was true before now.,,2026-09-17
+I will be,budu,You use this when you talk about yourself in the future.,,2026-09-17
+I will play,budu hrát,You use this when you will play later.,,2026-09-17
+something,něco,"A thing, but you do not name it.",,2026-09-17
+because,protože,You use this word to give a reason.,,2026-09-17
+haunted,strašidelný,A haunted place has ghosts in stories.,,2026-09-24
+nature,příroda,"Animals, trees, rivers and other things not made by people.",,2026-09-24
+subject,předmět (ve škole),"A school thing that you learn, like English or maths.",,2026-09-24
+language,jazyk,"The words that people in a country speak, like Czech or English.",,2026-09-24
+ill,nemocný,Not well in your body; you feel sick.,I am at home because I am ill and I can't go to school.,2026-09-24
+ski,lyžovat,To move on snow with long skis on your feet.,,2026-09-29
+skate,bruslit,To move on ice or on a street with skates.,,2026-09-29
+come,přijít / přijet,"To move to the place where I am, or to join me.",,2026-09-29
+watch TV,dívat se na televizi,To sit and look at a programme on television.,,2026-09-29
+must,muset,You have to do this; it is necessary.,,2026-09-29
+learn,učit se,To get new knowledge or a new skill.,,2026-09-29
+ham,šunka,Meat that often goes in a sandwich.,,2026-10-01
+bread,chléb,A food made from flour; you can make a sandwich with it.,,2026-10-01
+yesterday,včera,The day before today.,,2026-10-01
+today,dnes,"This day, now.",,2026-10-01
+tomorrow,zítra,The day after today.,,2026-10-01
+food,jídlo,The things you eat.,,2026-10-06
+plate,talíř,A flat dish that you put your meal on.,,2026-10-06
+spoon,lžíce,You use it to eat soup or other soft food.,,2026-10-06
+fork,vidlička,You use it to pick up food and put it in your mouth.,,2026-10-06
+knife,nůž,You use it to cut food.,,2026-10-06
+glass,sklenice,A cup made of glass; you drink water or juice from it.,,2026-10-06
+cup,šálek,"A small open pot, often with a handle, for tea or coffee.",,2026-10-06
+mug,hrnek,"A bigger cup with a handle, for a hot drink.",,2026-10-06
+clock,hodiny,A thing that shows you the time.,,2026-10-06
+bin,koš,A container where you put rubbish.,,2026-10-06
+headphones,sluchátka,You put them on your ears to listen to music or a video.,,2026-10-06
+washbasin,umyvadlo,A bowl with water in the bathroom where you wash your hands or face.,,2026-10-06
+mustard,hořčice,A strong yellow sauce that you can put on food.,,2026-10-08
+mustn't,nesmět,You are not allowed to do this.,,2026-10-08
+onion,cibule,A vegetable that can make your eyes water when you cut it.,,2026-10-08
+lettuce,hlávkový salát,A green leaf vegetable that you often eat in a salad.,,2026-10-08
+carrot,mrkev,A long orange vegetable.,,2026-10-08
+cucumber,okurka,A long green vegetable that is often in a salad.,,2026-10-08
+cheeky,drzý,"A little rude, but sometimes in a funny way.",,2026-10-08
+pass,přihrát / podat,"To give something to another person, or to kick the ball to them.",Pass me the ball.,2026-10-13
+Pass me the ball.,Přihráj mi míč. / Podej mi míč.,You ask someone to give or kick the ball to you.,,2026-10-13
+Could you pass me...?,Mohl bys mi podat...?,A polite way to ask someone to give you something.,,2026-10-13
+ill,nemocný,Not well in your body; you feel sick.,,2026-10-20
+thirsty,žíznivý,You want something to drink.,,2026-10-20
+bowl,miska,"A deep, round dish that you put food in.",,2026-10-20
+I dunno.,Nevím. (hovorově),"A short, informal way to say 'I don't know'.",,2026-10-20
+I don't know.,Nevím.,You say this when you do not have the answer.,,2026-10-20
+celebrate,slavit,To have a happy time because something good has happened.,I will have my birthday party at the weekend. Can you come? We will barbecue.,2026-10-20
+have a party,pořádat oslavu,To invite people and have a fun celebration together.,,2026-10-20
+go,jít / jet,To move from here to another place. It is the opposite of 'come'.,,2026-10-20
+come,přijít / přijet,"To move to the place where I am, or to join me. It is the opposite of 'go'.",I will have my birthday party at the weekend. Can you come? We will barbecue.,2026-10-20
+every other day,obden,"On one day you do it, the next day you do not, then you do it again.",,2026-10-22
+drums,bicí,A musical instrument that you play with sticks or with your hands.,,2026-10-22
+sing,zpívat,To make music with your voice.,,2026-10-22
+song,písnička,A short piece of music with words that you can sing.,,2026-10-22
+where,kde,A question word about a place.,,2026-10-22
+who,kdo,A question word about a person.,,2026-10-22
+when,kdy,A question word about time.,,2026-10-22
+what,co,A question word about a thing.,,2026-10-22
+why,proč,A question word you use when you want a reason.,,2026-10-22
+whose,čí,A question word about who something belongs to.,,2026-10-22
+maybe,možná / asi,You are not sure; it is possible.,Maybe we will go...,2026-10-30
+goal,branka,"The place where you send the ball to get a point, or the point itself.",,2026-10-30
+goalkeeper,brankář,The player who stands in the goal and tries to stop the ball.,,2026-10-30
+ghost,duch,A dead person in a story who can still appear.,,2026-10-30
+haunted,strašidelný,A haunted place has ghosts in stories.,,2026-10-30
+witch,čarodějnice,A woman in stories who can do magic.,,2026-10-30
+Trick or treat.,"Sladkosti, nebo vám něco provedu!",Children say this at Halloween when they ask for sweets.,,2026-10-30
+candle,svíčka,A stick of wax with a flame that gives a small light.,,2026-10-30
+pumpkin,dýně,"A big, round, orange fruit; people make a face in it at Halloween.",,2026-10-30
+spider,pavouk,A small animal with eight legs that makes a web.,,2026-10-30
+bat,netopýr,A small animal that flies at night.,,2026-10-30
+skeleton,kostra,All the bones of a person or an animal.,,2026-10-30
+creepy,děsivý / strašidelný,"A little scary, in a way that makes you feel strange.",,2026-10-30
+Boo!,Bú!,A short sound people make to scare someone in a fun way.,,2026-10-30
+of course,samozřejmě,"Yes, that is clear; you agree or it is easy.",,2026-11-03
+wear,nosit (na sobě),To have clothes on your body.,,2026-11-03
+pyjamas,pyžamo,The clothes you wear in bed.,,2026-11-03
+how,jak,A question word about the way something happens or is done.,,2026-11-03
+half,půl / polovina,One of two equal parts of something.,,2026-11-05
+good,dobrý,"Nice or of a high quality. The forms are good, better, the best.",good - better - the best,2026-11-05
+better,lepší,The comparative form of 'good'; more good than something else.,good - better - the best,2026-11-05
+the best,nejlepší,The superlative form of 'good'; better than all the others.,good - better - the best,2026-11-05
+bad,špatný,"Not good. The forms are bad, worse, the worst.",bad - worse - the worst,2026-11-05
+worse,horší,The comparative form of 'bad'; more bad than something else.,bad - worse - the worst,2026-11-05
+the worst,nejhorší,The superlative form of 'bad'; worse than all the others.,bad - worse - the worst,2026-11-05
+injured,zraněný,Hurt in your body after an accident or a game.,,2026-11-05
+injury,zranění,A place on your body that is hurt.,,2026-11-05
+shout,křičet,To say something in a very loud voice.,,2026-11-05
+cry,plakat,To have tears in your eyes because you are sad or hurt.,,2026-11-05
+package,balíček,A box or a parcel with something inside.,,2026-11-10
+collect,sbírat / vyzvednout,"To go and get something, or to bring things together.",,2026-11-10
+more,víc / více,A bigger amount; not less.,,2026-11-10
+less,míň / méně,A smaller amount; not more.,,2026-11-10
+How much is...?,Kolik stojí...?,You ask this when you want to know the price.,,2026-11-10
+inside,uvnitř,"In a place, not out of it.",,2026-11-12
+outside,venku / venkovní,Not in a building; in the open air.,,2026-11-12
+good at,dobrý v (něčem),You can do something well.,,2026-11-12
+bad at,špatný v (něčem),You cannot do something well.,,2026-11-12
+before,před / předtím,Earlier than something else.,,2026-11-12
+after,po / potom,Later than something else.,,2026-11-12
+dinner,večeře,The main meal you eat in the evening.,,2026-11-12
+alarm clock,budík,A clock that makes a loud sound to wake you up.,,2026-11-17
+how many times,kolikrát,A question about the number of times something happens.,,2026-11-17
+old,starý,"Not young, or not new.",,2026-11-17
+need,potřebovat,You must have something because it is important.,,2026-11-17
+wake up,probudit se,To stop sleeping and open your eyes.,,2026-11-17
+get up,vstát,To leave your bed and stand up.,,2026-11-17
+get,dostat / získat,"To receive something, or to have it given to you.",,2026-11-17
