@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#e8f3ff">
+  <meta name="color-scheme" content="light">
+  <title>Střelnice slovíček</title>
+  <style>
+    :root {
+      --sky: #e8f3ff;
+      --paper: #ffffff;
+      --ink: #1a2744;
+      --muted: #3d4d6a;
+      --line: #c9d6ea;
+      --blue: #1d64c2;
+      --blue-hover: #1554a5;
+      --blue-soft: #d6e7ff;
+      --green: #0b7a3b;
+      --green-bg: #def7e8;
+      --red: #b42318;
+      --red-bg: #fde8e6;
+      --shadow: 0 10px 30px rgba(26, 39, 68, 0.08);
+      --radius: 18px;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      padding: 1.1rem 1rem 2.4rem;
+      font-family: "Trebuchet MS", "Segoe UI", system-ui, sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(1200px 500px at 8% -10%, #cfe6ff 0%, transparent 50%),
+        radial-gradient(800px 420px at 100% 0%, #ffe9c8 0%, transparent 46%),
+        var(--sky);
+      line-height: 1.5;
+    }
+    .wrap { width: min(44rem, 100%); margin: 0 auto; }
+    .back {
+      display: inline-block;
+      margin: 0 0 0.9rem;
+      color: var(--blue);
+      font-weight: 700;
+      text-decoration: none;
+    }
+    .back:hover, .back:focus-visible { text-decoration: underline; }
+    .kicker {
+      margin: 0 0 0.25rem;
+      color: var(--muted);
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+      font-size: 0.8rem;
+    }
+    h1 {
+      margin: 0 0 0.6rem;
+      font-size: clamp(1.55rem, 5vw, 2.05rem);
+      line-height: 1.2;
+    }
+    .intro { margin: 0 0 1.1rem; color: var(--muted); font-size: 1.05rem; }
+    section {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 1.15rem 1.1rem 1.25rem;
+      margin: 0 0 1rem;
+    }
+    h2 { margin: 0 0 0.5rem; font-size: 1.25rem; }
+    p { margin: 0 0 0.8rem; }
+    button {
+      appearance: none;
+      border: 0;
+      border-radius: 999px;
+      padding: 0.62rem 1.05rem;
+      font: 700 1rem/1.2 "Trebuchet MS", "Segoe UI", system-ui, sans-serif;
+      cursor: pointer;
+      min-height: 44px;
+    }
+    button.primary { background: var(--blue); color: #fff; }
+    button.primary:hover, button.primary:focus-visible { background: var(--blue-hover); }
+    button:focus-visible { outline: 3px solid #8cb6f0; outline-offset: 2px; }
+    noscript {
+      display: block;
+      margin: 1rem 0;
+      padding: 0.8rem 1rem;
+      background: var(--red-bg);
+      color: var(--red);
+      border-radius: 12px;
+    }
+    .shoot-hud {
+      display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+      gap: 0.4rem 0.8rem; margin: 0 0 0.55rem; font-weight: 700; color: var(--muted);
+    }
+    .shoot-timer { font-variant-numeric: tabular-nums; font-size: 1.15rem; color: var(--ink); }
+    .arena {
+      position: relative; overflow: hidden;
+      height: clamp(340px, 62vh, 520px);
+      border-radius: 16px; border: 2px solid #9ec1ee;
+      background:
+        radial-gradient(circle at 20% 15%, rgba(255,255,255,0.75) 0 6%, transparent 7%),
+        radial-gradient(circle at 75% 30%, rgba(255,255,255,0.6) 0 5%, transparent 6%),
+        linear-gradient(180deg, #bfe0ff 0%, #e7f4ff 70%, #d9f2d0 100%);
+      touch-action: manipulation; user-select: none; -webkit-user-select: none;
+      cursor: crosshair;
+    }
+    .target-bar {
+      position: absolute; left: 0; right: 0; top: 0; z-index: 5;
+      padding: 0.55rem 0.8rem; text-align: center;
+      background: rgba(26, 39, 68, 0.88); color: #fff;
+      font-size: clamp(1.05rem, 4.4vw, 1.4rem); font-weight: 700; line-height: 1.25;
+      pointer-events: none;
+    }
+    .target-bar small { display: block; font-size: 0.78rem; font-weight: 400; opacity: 0.85; }
+    .target-bar.flash-bad { background: rgba(180, 35, 24, 0.92); }
+    .target-bar.flash-ok { background: rgba(11, 122, 59, 0.92); }
+    .bubble {
+      position: absolute; left: 0; top: 0; z-index: 2;
+      padding: 0.55rem 0.95rem; min-height: 44px;
+      border-radius: 999px; border: 3px solid #fff;
+      background: #ffd166; color: #1a2744;
+      font: 700 clamp(1rem, 4vw, 1.2rem)/1.2 "Trebuchet MS", "Segoe UI", system-ui, sans-serif;
+      white-space: normal; max-width: min(90%, 14rem); text-align: center; cursor: crosshair;
+      box-shadow: 0 6px 14px rgba(26, 39, 68, 0.18);
+      will-change: transform; touch-action: manipulation;
+    }
+    .bubble:nth-child(4n+1) { background: #ffd166; }
+    .bubble:nth-child(4n+2) { background: #a0e7a5; }
+    .bubble:nth-child(4n+3) { background: #ffb3c7; }
+    .bubble:nth-child(4n+4) { background: #b9d7ff; }
+    .bubble.bad { background: #ff8a80 !important; animation: shake 0.35s; }
+    .bubble.pop { pointer-events: none; animation: pop 0.35s forwards; }
+    @keyframes shake {
+      0%, 100% { margin-left: 0; } 25% { margin-left: -8px; } 75% { margin-left: 8px; }
+    }
+    @keyframes pop {
+      to { opacity: 0; filter: blur(2px); scale: 1.6; }
+    }
+    .arena-overlay {
+      position: absolute; inset: 0; z-index: 6;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 0.6rem; padding: 1rem; text-align: center;
+      background: rgba(232, 243, 255, 0.92); cursor: default;
+    }
+    .arena-overlay[hidden] { display: none; }
+    .arena-overlay .big { font-size: clamp(1.4rem, 6vw, 2rem); font-weight: 700; margin: 0; }
+    .arena-overlay .time { font-size: clamp(2rem, 10vw, 3.2rem); font-weight: 700; color: var(--green); margin: 0; font-variant-numeric: tabular-nums; }
+    .shoot-feedback { min-height: 1.5em; margin: 0.55rem 0 0; font-weight: 700; text-align: center; }
+    .shoot-feedback.ok { color: var(--green); }
+    .shoot-feedback.bad { color: var(--red); }
+    .error-text { color: var(--red); font-weight: 700; margin: 0; }
+    @media (prefers-reduced-motion: reduce) { .bubble.bad { animation: none; } }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <a class="back" href="../">← Všechny hry</a>
+    <header>
+      <p class="kicker">Lekce <span id="date-cs">…</span></p>
+      <h1>Střelnice slovíček 🎯</h1>
+      <p class="intro" id="intro">Nahoře uvidíš české slovo. Sestřel (klikni nebo ťukni) správné anglické slovo, které létá po hřišti. Slova jdou postupně jedno po druhém. Po každém zásahu slovo uslyšíš anglicky a zbylá slova zrychlí o 10 %. Měříme ti čas! Když hraješ znovu, postupně přibývají další už probraná slovíčka z předchozích lekcí.</p>
+    </header>
+    <noscript>Tato hra potřebuje zapnutý JavaScript.</noscript>
+    <main>
+      <section id="shoot-section" aria-live="polite">
+        <h2>Střelnice slovíček 🎯</h2>
+        <p id="lesson-note">Načítám slovíčka z tabulky…</p>
+        <div class="shoot-hud">
+          <span><span id="shoot-round">Kolo 1</span> · <span id="shoot-progress">Slovo 0 z 0</span></span>
+          <span>Čas: <span class="shoot-timer" id="shoot-timer">00:00</span></span>
+        </div>
+        <div class="arena" id="arena">
+          <div class="target-bar" id="target-bar"><small>Sestřel anglicky:</small><span id="target-word">…</span></div>
+          <div id="bubbles"></div>
+          <div class="arena-overlay" id="shoot-loading">
+            <p class="big">Načítám slovíčka…</p>
+          </div>
+          <div class="arena-overlay" id="shoot-error" hidden>
+            <p class="big">Nepodařilo se načíst slovíčka</p>
+            <p class="error-text" id="shoot-error-text"></p>
+          </div>
+          <div class="arena-overlay" id="shoot-start" hidden>
+            <p class="big">Připraven? 🎯</p>
+            <p>Sestřel slovíčka ve správném pořadí podle českého zadání.</p>
+            <button type="button" class="primary" id="btn-shoot-start">Start</button>
+          </div>
+          <div class="arena-overlay" id="shoot-done" hidden>
+            <p class="big" id="shoot-done-title">🏆 Hotovo! Skvělá práce!</p>
+            <p>Všechna slova jsi trefil(a) správně. Trvalo ti to:</p>
+            <p class="time" id="shoot-final-time">00:00</p>
+            <p id="shoot-best"></p>
+            <p id="shoot-next-note"></p>
+            <button type="button" class="primary" id="btn-shoot-again">Hrát znovu</button>
+          </div>
+        </div>
+        <p class="shoot-feedback" id="shoot-feedback"></p>
+      </section>
+    </main>
+  </div>
+  <script>
+  (function () {
+    const params = new URLSearchParams(location.search);
+    const cacheVer = params.get("v");
+    const lessonParam = params.get("lekce");
+    const CSV_URL = "../slovicka.csv" + (cacheVer ? "?v=" + encodeURIComponent(cacheVer) : "");
+    const SWAP_PER_ROUND = 2;
+    const SPEED_STEP = 1.10;
+    const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
+
+    const shoot = window.__shoot = {
+      running: false, order: [], idx: 0, bubbles: [], startTs: 0, raf: 0, tick: 0, lastTs: 0, speedMul: 1, round: 0, roundWords: [], usedReviewed: {}
+    };
+    let shootWords = [];
+    let reviewedPool = [];
+    let lessonDate = "";
+
+    function normalize(value) {
+      return String(value || "")
+        .trim()
+        .toLowerCase()
+        .replace(/[-_]/g, " ")
+        .replace(/\s+/g, " ");
+    }
+
+    function formatDateCs(iso) {
+      const parts = String(iso).split("-");
+      if (parts.length !== 3) return iso;
+      return Number(parts[2]) + ". " + Number(parts[1]) + ". " + parts[0];
+    }
+
+    function parseCsv(text) {
+      text = String(text || "").replace(/^\uFEFF/, "");
+      const rows = [];
+      let row = [];
+      let cell = "";
+      let inQuotes = false;
+      for (let i = 0; i < text.length; i += 1) {
+        const c = text[i];
+        const next = text[i + 1];
+        if (inQuotes) {
+          if (c === '"' && next === '"') { cell += '"'; i += 1; }
+          else if (c === '"') inQuotes = false;
+          else cell += c;
+        } else if (c === '"') {
+          inQuotes = true;
+        } else if (c === ",") {
+          row.push(cell);
+          cell = "";
+        } else if (c === "\n" || c === "\r") {
+          if (c === "\r" && next === "\n") i += 1;
+          row.push(cell);
+          cell = "";
+          if (row.some(function (part) { return part !== ""; })) rows.push(row);
+          row = [];
+        } else {
+          cell += c;
+        }
+      }
+      if (cell !== "" || row.length) {
+        row.push(cell);
+        rows.push(row);
+      }
+      if (!rows.length) return [];
+      const header = rows.shift().map(function (name) { return name.trim(); });
+      return rows.map(function (parts) {
+        const item = {};
+        header.forEach(function (name, index) {
+          item[name] = String(parts[index] || "").trim();
+        });
+        return item;
+      }).filter(function (item) { return item.en && item.cz && DATE_RE.test(item.lesson_date); });
+    }
+
+    function uniqueLatestByEn(rows) {
+      const latest = {};
+      const order = [];
+      rows.forEach(function (row) {
+        const key = row.en.casefold ? row.en.casefold() : row.en.toLowerCase();
+        if (!latest[key]) {
+          order.push(key);
+          latest[key] = row;
+          return;
+        }
+        if (row.lesson_date >= latest[key].lesson_date) latest[key] = row;
+      });
+      return order.map(function (key) { return latest[key]; });
+    }
+
+    function wordsForLesson(rows, date) {
+      const seen = {};
+      const out = [];
+      rows.forEach(function (row) {
+        if (row.lesson_date !== date) return;
+        const k = normalize(row.en);
+        if (!k || seen[k]) return;
+        seen[k] = true;
+        out.push({ en: row.en, cs: row.cz });
+      });
+      return out;
+    }
+
+    function buildReviewedPool(rows, date, lesson) {
+      const lessonEn = {}, lessonCs = {}, seen = {};
+      lesson.forEach(function (w) {
+        lessonEn[normalize(w.en)] = 1;
+        lessonCs[normalize(w.cs)] = 1;
+      });
+      const eligible = uniqueLatestByEn(rows.filter(function (row) {
+        return row.lesson_date <= date;
+      }));
+      const pool = [];
+      eligible.forEach(function (w) {
+        const enKey = normalize(w.en);
+        if (!enKey || seen[enKey] || lessonEn[enKey] || lessonCs[normalize(w.cz)]) return;
+        seen[enKey] = 1;
+        pool.push({ en: w.en, cs: w.cz });
+      });
+      return pool;
+    }
+
+    function showError(message) {
+      document.getElementById("shoot-loading").hidden = true;
+      document.getElementById("shoot-start").hidden = true;
+      document.getElementById("shoot-done").hidden = true;
+      document.getElementById("shoot-error").hidden = false;
+      document.getElementById("shoot-error-text").textContent = message;
+      document.getElementById("lesson-note").textContent = message;
+    }
+
+    function fmtTime(ms) {
+      const t = Math.max(0, Math.floor(ms / 1000));
+      const m = Math.floor(t / 60), sec = t % 60;
+      return (m < 10 ? "0" : "") + m + ":" + (sec < 10 ? "0" : "") + sec;
+    }
+
+    function shuffle(arr) {
+      const a = arr.slice();
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        const t = a[i]; a[i] = a[j]; a[j] = t;
+      }
+      return a;
+    }
+
+    function buildRoundWords(round) {
+      const n = shootWords.length;
+      if (round <= 1 || !reviewedPool.length) return shootWords.slice();
+      const maxNew = Math.max(0, n - 1);
+      const newCount = Math.min(maxNew, (round - 1) * SWAP_PER_ROUND, reviewedPool.length);
+      const kept = shuffle(shootWords).slice(0, n - newCount);
+      const usedEn = {}, usedCs = {};
+      kept.forEach(function (w) {
+        usedEn[normalize(w.en)] = 1;
+        usedCs[normalize(w.cs)] = 1;
+      });
+      let fresh = reviewedPool.filter(function (w) { return !shoot.usedReviewed[normalize(w.en)]; });
+      if (fresh.length < newCount) { shoot.usedReviewed = {}; fresh = reviewedPool.slice(); }
+      const picked = [];
+      shuffle(fresh).forEach(function (w) {
+        if (picked.length >= newCount) return;
+        const enKey = normalize(w.en);
+        const csKey = normalize(w.cs);
+        if (usedEn[enKey] || usedCs[csKey]) return;
+        usedEn[enKey] = 1;
+        usedCs[csKey] = 1;
+        picked.push(w);
+        shoot.usedReviewed[enKey] = 1;
+      });
+      return kept.concat(picked);
+    }
+    window.__buildRoundWords = buildRoundWords;
+
+    function shootProgress() {
+      const n = shoot.roundWords.length || shootWords.length;
+      document.getElementById("shoot-round").textContent = "Kolo " + Math.max(1, shoot.round);
+      const shown = shoot.running ? Math.min(shoot.idx + 1, n) : (shoot.idx >= n && n ? n : 0);
+      document.getElementById("shoot-progress").textContent = "Slovo " + shown + " z " + n;
+      const tw = document.getElementById("target-word");
+      tw.textContent = shoot.running && shoot.order[shoot.idx] ? shoot.order[shoot.idx].cs : "…";
+    }
+
+    function setShootFeedback(text, cls) {
+      const el = document.getElementById("shoot-feedback");
+      el.className = "shoot-feedback" + (cls ? " " + cls : "");
+      el.textContent = text;
+    }
+
+    function flashBar(cls) {
+      const bar = document.getElementById("target-bar");
+      bar.classList.remove("flash-ok", "flash-bad");
+      void bar.offsetWidth;
+      bar.classList.add(cls);
+      setTimeout(function () { bar.classList.remove(cls); }, 450);
+    }
+
+    let enVoice = null;
+    function pickVoice() {
+      try {
+        if (!("speechSynthesis" in window)) return;
+        const voices = window.speechSynthesis.getVoices() || [];
+        enVoice = voices.find(function (v) { return /^en[-_]US/i.test(v.lang); }) ||
+          voices.find(function (v) { return /^en[-_]GB/i.test(v.lang); }) ||
+          voices.find(function (v) { return /^en/i.test(v.lang); }) || null;
+      } catch (e) { enVoice = null; }
+    }
+    try {
+      if ("speechSynthesis" in window) {
+        pickVoice();
+        if (typeof window.speechSynthesis.addEventListener === "function") {
+          window.speechSynthesis.addEventListener("voiceschanged", pickVoice);
+        }
+      }
+    } catch (e) {}
+    function speakWord(text, volume) {
+      try {
+        if (!("speechSynthesis" in window) || typeof SpeechSynthesisUtterance === "undefined") return;
+        const synth = window.speechSynthesis;
+        synth.cancel();
+        if (!enVoice) pickVoice();
+        const u = new SpeechSynthesisUtterance(text);
+        u.lang = enVoice ? enVoice.lang : "en-US";
+        if (enVoice) u.voice = enVoice;
+        u.rate = 1.1;
+        if (typeof volume === "number") u.volume = volume;
+        synth.speak(u);
+      } catch (e) {}
+    }
+
+    function startShoot() {
+      if (!shootWords.length) return;
+      shoot.speedMul = 1;
+      shoot.round += 1;
+      shoot.roundWords = buildRoundWords(shoot.round);
+      speakWord(" ", 0); /* iOS: odemkne řeč při ťuknutí na Start */
+      const arena = document.getElementById("arena");
+      const layer = document.getElementById("bubbles");
+      layer.innerHTML = "";
+      shoot.bubbles = [];
+      shoot.order = shuffle(shoot.roundWords);
+      shoot.idx = 0;
+      const W = arena.clientWidth, H = arena.clientHeight;
+      const top = document.getElementById("target-bar").offsetHeight + 6;
+      const speedBase = Math.max(40, Math.min(85, W / 7));
+      shuffle(shoot.roundWords).forEach(function (w) {
+        const b = document.createElement("button");
+        b.type = "button";
+        b.className = "bubble";
+        b.textContent = w.en;
+        layer.appendChild(b);
+        const bw = b.offsetWidth, bh = b.offsetHeight;
+        const angle = Math.random() * Math.PI * 2;
+        const sp = speedBase * (0.75 + Math.random() * 0.5);
+        const obj = {
+          el: b, word: w, w: bw, h: bh,
+          x: Math.random() * Math.max(1, W - bw),
+          y: top + Math.random() * Math.max(1, H - top - bh),
+          vx: Math.cos(angle) * sp, vy: Math.sin(angle) * sp, alive: true
+        };
+        b.style.transform = "translate(" + obj.x + "px," + obj.y + "px)";
+        b.addEventListener("pointerdown", function (e) { e.preventDefault(); hitBubble(obj); });
+        b.addEventListener("keydown", function (e) {
+          if (e.key === "Enter" || e.key === " ") { e.preventDefault(); hitBubble(obj); }
+        });
+        shoot.bubbles.push(obj);
+      });
+      document.getElementById("shoot-loading").hidden = true;
+      document.getElementById("shoot-error").hidden = true;
+      document.getElementById("shoot-start").hidden = true;
+      document.getElementById("shoot-done").hidden = true;
+      setShootFeedback("", "");
+      shoot.running = true;
+      shoot.startTs = performance.now();
+      shoot.lastTs = shoot.startTs;
+      document.getElementById("shoot-timer").textContent = "00:00";
+      shootProgress();
+      cancelAnimationFrame(shoot.raf);
+      shoot.raf = requestAnimationFrame(stepShoot);
+      clearInterval(shoot.tick);
+      shoot.tick = setInterval(function () {
+        if (shoot.running) document.getElementById("shoot-timer").textContent = fmtTime(performance.now() - shoot.startTs);
+      }, 250);
+    }
+
+    function stepShoot(ts) {
+      if (!shoot.running) return;
+      const arena = document.getElementById("arena");
+      const W = arena.clientWidth, H = arena.clientHeight;
+      const top = document.getElementById("target-bar").offsetHeight + 4;
+      const dt = Math.min(0.05, Math.max(0, (ts - shoot.lastTs) / 1000));
+      shoot.lastTs = ts;
+      const alive = shoot.bubbles.filter(function (o) { return o.alive; });
+      alive.forEach(function (o) {
+        o.x += o.vx * shoot.speedMul * dt; o.y += o.vy * shoot.speedMul * dt;
+        if (o.x < 0) { o.x = 0; o.vx = Math.abs(o.vx); }
+        if (o.x + o.w > W) { o.x = Math.max(0, W - o.w); o.vx = -Math.abs(o.vx); }
+        if (o.y < top) { o.y = top; o.vy = Math.abs(o.vy); }
+        if (o.y + o.h > H) { o.y = Math.max(top, H - o.h); o.vy = -Math.abs(o.vy); }
+      });
+      for (let i = 0; i < alive.length; i++) {
+        for (let j = i + 1; j < alive.length; j++) {
+          const a = alive[i], b = alive[j];
+          const ox = Math.min(a.x + a.w, b.x + b.w) - Math.max(a.x, b.x);
+          const oy = Math.min(a.y + a.h, b.y + b.h) - Math.max(a.y, b.y);
+          if (ox > 0 && oy > 0) {
+            if (ox < oy) {
+              const s = a.x < b.x ? -1 : 1;
+              a.x += s * ox / 2; b.x -= s * ox / 2;
+              const t = a.vx; a.vx = b.vx; b.vx = t;
+            } else {
+              const s = a.y < b.y ? -1 : 1;
+              a.y += s * oy / 2; b.y -= s * oy / 2;
+              const t = a.vy; a.vy = b.vy; b.vy = t;
+            }
+          }
+        }
+      }
+      alive.forEach(function (o) {
+        o.el.style.transform = "translate(" + o.x.toFixed(1) + "px," + o.y.toFixed(1) + "px)";
+      });
+      shoot.raf = requestAnimationFrame(stepShoot);
+    }
+
+    function hitBubble(obj) {
+      if (!shoot.running || !obj.alive) return;
+      const target = shoot.order[shoot.idx];
+      if (normalize(obj.word.en) === normalize(target.en)) {
+        obj.alive = false;
+        speakWord(target.en);
+        shoot.speedMul *= SPEED_STEP;
+        obj.el.classList.add("pop");
+        setTimeout(function () { if (obj.el.parentNode) obj.el.parentNode.removeChild(obj.el); }, 360);
+        flashBar("flash-ok");
+        shoot.idx += 1;
+        if (shoot.idx >= shoot.order.length) {
+          finishShoot();
+        } else {
+          setShootFeedback("Zásah! „" + target.cs + "“ je „" + target.en + "“. 🎯", "ok");
+          shootProgress();
+        }
+      } else {
+        obj.el.classList.remove("bad");
+        void obj.el.offsetWidth;
+        obj.el.classList.add("bad");
+        setTimeout(function () { obj.el.classList.remove("bad"); }, 400);
+        flashBar("flash-bad");
+        setShootFeedback("Vedle! „" + obj.word.en + "“ znamená „" + obj.word.cs + "“. Zkus to znovu.", "bad");
+      }
+    }
+
+    function finishShoot() {
+      const elapsed = performance.now() - shoot.startTs;
+      shoot.running = false;
+      shoot.finishedAt = performance.now();
+      cancelAnimationFrame(shoot.raf);
+      clearInterval(shoot.tick);
+      const t = fmtTime(elapsed);
+      document.getElementById("shoot-timer").textContent = t;
+      document.getElementById("shoot-final-time").textContent = t;
+      let bestText = "";
+      try {
+        const k = "anglictina-strelba-" + (lessonDate || "");
+        const prev = Number(localStorage.getItem(k) || 0);
+        if (!prev || elapsed < prev) {
+          localStorage.setItem(k, String(Math.round(elapsed)));
+          bestText = !prev ? "" : (fmtTime(prev) === t ? "Vyrovnal(a) jsi svůj nejlepší čas." : "Nový rekord! Předchozí nejlepší čas byl " + fmtTime(prev) + ".");
+        } else {
+          bestText = "Tvůj nejlepší čas: " + fmtTime(prev) + ".";
+        }
+      } catch (e) { bestText = ""; }
+      document.getElementById("shoot-best").textContent = bestText;
+      document.getElementById("shoot-done-title").textContent = "🏆 Kolo " + shoot.round + " hotové! Skvělá práce!";
+      const lessonLeft = shootWords.length - Math.min(Math.max(0, shootWords.length - 1), shoot.round * SWAP_PER_ROUND, reviewedPool.length);
+      document.getElementById("shoot-next-note").textContent = reviewedPool.length
+        ? (lessonLeft <= 1 ? "V dalším kole už budou skoro všechna slovíčka z dřívějších lekcí." : "V dalším kole přibydou další už probraná slovíčka z předchozích lekcí.")
+        : "";
+      document.getElementById("shoot-done").hidden = false;
+      setShootFeedback("Hotovo za " + t + ". Výborně! 🏆", "ok");
+      shootProgress();
+      window.__shootResult = { time: t, ms: Math.round(elapsed), speedMul: shoot.speedMul, round: shoot.round, words: shoot.roundWords.map(function (w) { return w.en; }) };
+    }
+
+    document.getElementById("btn-shoot-start").addEventListener("click", startShoot);
+    document.getElementById("btn-shoot-again").addEventListener("click", function () {
+      /* Na mobilu by poslední ťuknutí mohlo hned „kliknout“ i na Hrát znovu. */
+      if (performance.now() - (shoot.finishedAt || 0) < 800) return;
+      startShoot();
+    });
+
+    function ready(rows, date) {
+      shootWords = wordsForLesson(rows, date);
+      if (!shootWords.length) {
+        showError("Pro lekci " + formatDateCs(date) + " v tabulce nejsou žádná slovíčka.");
+        return;
+      }
+      reviewedPool = buildReviewedPool(rows, date, shootWords);
+      lessonDate = date;
+      window.__shootWords = shootWords;
+      window.__reviewedPool = reviewedPool;
+      window.__lessonDate = lessonDate;
+      const dateCs = formatDateCs(date);
+      document.getElementById("date-cs").textContent = dateCs;
+      document.getElementById("lesson-note").textContent =
+        "První kolo je ze slovíček lekce " + dateCs + ". V dalších kolech se postupně vyměňují za už probraná slovíčka z tabulky.";
+      document.getElementById("shoot-loading").hidden = true;
+      document.getElementById("shoot-error").hidden = true;
+      document.getElementById("shoot-start").hidden = false;
+      shootProgress();
+    }
+
+    fetch(CSV_URL, { cache: "no-cache" }).then(function (response) {
+      if (!response.ok) throw new Error("csv");
+      return response.text();
+    }).then(function (text) {
+      const rows = parseCsv(text);
+      if (!rows.length) {
+        showError("Tabulka slovíček je prázdná.");
+        return;
+      }
+      const dates = {};
+      rows.forEach(function (row) { dates[row.lesson_date] = 1; });
+      let date = lessonParam;
+      if (date) {
+        if (!DATE_RE.test(date)) {
+          showError("Parametr lekce musí být datum ve tvaru YYYY-MM-DD.");
+          return;
+        }
+        if (!dates[date]) {
+          showError("Lekce " + formatDateCs(date) + " v tabulce není.");
+          return;
+        }
+      } else {
+        date = Object.keys(dates).sort().pop();
+      }
+      ready(rows, date);
+    }).catch(function () {
+      showError("Nepodařilo se načíst tabulku slovíček. Zkus stránku obnovit.");
+    });
+  })();
+  </script>
+</body>
+</html>

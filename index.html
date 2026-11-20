@@ -47,7 +47,9 @@
     .date { margin: 0 0 0.25rem; font-size: 1.2rem; font-weight: 700; color: var(--blue); }
     .words { margin: 0; color: var(--muted); }
     .empty { color: var(--muted); }
-    .vocab-link { margin: 0 0 1.2rem; }
+    .top-links { display: grid; gap: 0.8rem; margin: 0 0 1.2rem; }
+    @media (min-width: 32rem) { .top-links { grid-template-columns: 1fr 1fr; } }
+    .vocab-link { margin: 0; }
     a.card.vocab {
       display: flex;
       align-items: center;
@@ -63,7 +65,10 @@
   <div class="wrap">
     <h1>Angličtina – hry se slovíčky</h1>
     <p class="intro">Vyber si hru k lekci a procvič si nová slovíčka. Odpovědi se kontrolují hned a nic se nikam neodesílá.</p>
-    <p class="vocab-link"><a class="card vocab" href="slovicka/?v=2">📚 Všechna slovíčka</a></p>
+    <div class="top-links">
+      <p class="vocab-link"><a class="card vocab" href="slovicka/?v=2">📚 Všechna slovíčka</a></p>
+      <p class="vocab-link"><a class="card vocab" href="strelnice/?v=1">🎯 Jen střelnice</a></p>
+    </div>
     <ul>
 <li><a class="card" href="2026-11-19/"><p class="date">19. 11. 2026</p><p class="words">8 slovíček: plum, tease, answer, answer back, granddad, grandma, answer the door, answer the phone</p></a></li>
 <li><a class="card" href="2026-11-17/"><p class="date">17. 11. 2026</p><p class="words">7 slovíček: alarm clock, how many times, old, need, wake up, get up, get</p></a></li>
